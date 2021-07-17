@@ -11,20 +11,16 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class BaseViewModel extends ViewModel {
 
-    private final CompositeDisposable _compositeDisposable;
+    private final CompositeDisposable compositeDisposable;
 
-    BaseViewModel(CompositeDisposable compositeDisposable) {
-        _compositeDisposable = compositeDisposable;
-    }
-
-    public CompositeDisposable getCompositeDisposable() {
-        return _compositeDisposable;
+    protected BaseViewModel(CompositeDisposable compositeDisposable) {
+        this.compositeDisposable = compositeDisposable;
     }
 
     @Override
     @CallSuper
     protected void onCleared() {
         super.onCleared();
-        _compositeDisposable.dispose();
+        compositeDisposable.dispose();
     }
 }

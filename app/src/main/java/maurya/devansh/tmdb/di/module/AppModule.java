@@ -11,6 +11,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import io.reactivex.disposables.CompositeDisposable;
 import maurya.devansh.tmdb.di.qualifier.ApplicationContext;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -45,5 +46,10 @@ public class AppModule {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 .build();
+    }
+
+    @Provides
+    public CompositeDisposable provideCompositeDisposable() {
+        return new CompositeDisposable();
     }
 }
