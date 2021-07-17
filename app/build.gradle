@@ -2,6 +2,9 @@ plugins {
     id 'com.android.application'
 }
 
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
 android {
     compileSdkVersion 30
 
@@ -16,9 +19,13 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "TMDB_API_KEY", localProperties['tmdbApiKey'])
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "TMDB_API_KEY", localProperties['tmdbApiKey'])
         }
     }
 
