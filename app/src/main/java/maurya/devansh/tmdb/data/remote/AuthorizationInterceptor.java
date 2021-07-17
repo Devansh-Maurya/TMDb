@@ -19,7 +19,7 @@ public class AuthorizationInterceptor implements Interceptor {
     @Override
     public Response intercept(@NotNull Chain chain) throws IOException {
         Request newRequest = chain.request().newBuilder()
-                .addHeader("Authorization", "Bearer: " + BuildConfig.TMDB_API_READ_ACCESS_TOKEN)
+                .addHeader("Authorization", "Bearer " + BuildConfig.TMDB_API_READ_ACCESS_TOKEN)
                 .build();
         return chain.proceed(newRequest);
     }
