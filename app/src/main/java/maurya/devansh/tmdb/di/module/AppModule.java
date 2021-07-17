@@ -12,6 +12,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import io.reactivex.disposables.CompositeDisposable;
+import maurya.devansh.tmdb.BuildConfig;
 import maurya.devansh.tmdb.data.remote.AuthorizationInterceptor;
 import maurya.devansh.tmdb.di.qualifier.ApplicationContext;
 import okhttp3.OkHttpClient;
@@ -45,6 +46,7 @@ public class AppModule {
     @Singleton
     public Retrofit provideRetrofit(OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
+                .baseUrl(BuildConfig.BASE_URL_TMDB_API)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 .build();
