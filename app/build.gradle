@@ -21,11 +21,13 @@ android {
     buildTypes {
         debug {
             buildConfigField("String", "TMDB_API_KEY", localProperties['tmdbApiKey'])
+            buildConfigField("String", "TMDB_API_READ_ACCESS_TOKEN", localProperties['tmdbApiReadAccessToken'])
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField("String", "TMDB_API_KEY", localProperties['tmdbApiKey'])
+            buildConfigField("String", "TMDB_API_READ_ACCESS_TOKEN", localProperties['tmdbApiReadAccessToken'])
         }
     }
 

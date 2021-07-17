@@ -12,6 +12,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import io.reactivex.disposables.CompositeDisposable;
+import maurya.devansh.tmdb.data.remote.AuthorizationInterceptor;
 import maurya.devansh.tmdb.di.qualifier.ApplicationContext;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -35,6 +36,7 @@ public class AppModule {
     @Singleton
     public OkHttpClient provideOkHttpClient(@ApplicationContext Context context) {
         return new OkHttpClient().newBuilder()
+                .addInterceptor(new AuthorizationInterceptor())
                 .addInterceptor(SpiderInterceptor.Companion.getInstance(context))
                 .build();
     }
