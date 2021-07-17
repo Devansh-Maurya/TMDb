@@ -1,8 +1,10 @@
-package maurya.devansh.tmdb;
+package maurya.devansh.tmdb.ui;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import maurya.devansh.tmdb.R;
 
 public class MainActivity extends AppCompatActivity {
 
