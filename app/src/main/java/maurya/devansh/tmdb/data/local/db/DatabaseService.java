@@ -16,5 +16,5 @@ import maurya.devansh.tmdb.data.model.Movie;
 @Database(entities = {Movie.class}, version = 1, exportSchema = false)
 public abstract class DatabaseService extends RoomDatabase {
 
-    abstract MovieDao movieDao();
+    public abstract MovieDao movieDao();
 }

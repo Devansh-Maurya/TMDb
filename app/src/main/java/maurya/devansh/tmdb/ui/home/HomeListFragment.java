@@ -64,7 +64,7 @@ public class HomeListFragment extends DaggerBaseFragment<HomeListViewModel, Frag
     public void performAction(Action action) {
         if (action instanceof Action.MovieBookmarked) {
             Action.MovieBookmarked movieBookmarked = (Action.MovieBookmarked) action;
-            movieBookmarked.movie.setBookmarked(movieBookmarked.isBookmarked);
+            viewModel.bookmarkMovie(movieBookmarked.movie, movieBookmarked.isBookmarked);
             toast(movieBookmarked.movie.getTitle() + movieBookmarked.isBookmarked);
         }
     }

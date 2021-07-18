@@ -7,6 +7,7 @@ import androidx.paging.PagedList;
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import maurya.devansh.tmdb.data.model.Movie;
 import maurya.devansh.tmdb.data.model.MoviesList;
 import maurya.devansh.tmdb.data.pagingdatasource.MoviePagingDataSource;
@@ -20,6 +21,8 @@ import maurya.devansh.tmdb.ui.base.BaseViewModel;
 
 public class HomeListViewModel extends BaseViewModel {
 
+    private final MovieRepository movieRepository;
+
     public final LiveData<PagedList<Movie>> movieListLiveData;
 
     // FIXME: 18/07/21 How to pass other movie list type? Ask someone
@@ -30,9 +33,18 @@ public class HomeListViewModel extends BaseViewModel {
             @MoviesListTypeQualifier(MoviesList.TYPE_TRENDING) int moviesListType
     ) {
         super(compositeDisposable);
+        this.movieRepository = movieRepository;
 
         MoviePagingDataSource.Factory factory =
                 new MoviePagingDataSource.Factory(movieRepository, compositeDisposable, moviesListType);
         movieListLiveData = new LivePagedListBuilder<>(factory, MoviePagingDataSource.PAGE_SIZE).build();
+    }
+
+    public void bookmarkMovie(Movie movie, boolean isBookmarked) {
+        compositeDisposable.add(movieRepository.bookmarkMovie(movie, isBookmarked)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe()
+        );
     }
 }

@@ -6,6 +6,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import io.reactivex.Single;
 import maurya.devansh.tmdb.data.model.Movie;
 
 /**
@@ -16,7 +17,7 @@ import maurya.devansh.tmdb.data.model.Movie;
 public interface MovieDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertBookmarkedMovie(Movie movie);
+    Single<Long> insertBookmarkedMovie(Movie movie);
 
     // TODO: 18/07/21 Add order query
     @Query("SELECT * FROM movie WHERE is_bookmarked = 1")

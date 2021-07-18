@@ -1,8 +1,12 @@
 package maurya.devansh.tmdb.data.repository;
 
+import androidx.annotation.NonNull;
+
 import javax.inject.Inject;
 
 import io.reactivex.Single;
+import maurya.devansh.tmdb.data.local.db.DatabaseService;
+import maurya.devansh.tmdb.data.model.Movie;
 import maurya.devansh.tmdb.data.model.MoviesList;
 import maurya.devansh.tmdb.data.remote.NetworkService;
 import maurya.devansh.tmdb.utils.common.MoviesListType;
@@ -14,10 +18,12 @@ import maurya.devansh.tmdb.utils.common.MoviesListType;
 public class MovieRepository {
 
     private final NetworkService networkService;
+    private final DatabaseService databaseService;
 
     @Inject
-    MovieRepository(NetworkService networkService) {
+    MovieRepository(NetworkService networkService, DatabaseService databaseService) {
         this.networkService = networkService;
+        this.databaseService = databaseService;
     }
 
     public Single<MoviesList> getMoviesList(@MoviesListType int type, int page) {
@@ -41,5 +47,10 @@ public class MovieRepository {
 
     private Single<MoviesList> getNowPlayingMovies(int page) {
         return networkService.getNowPlayingMovies(page, "IN");
+    }
+
+    public Single<Long> bookmarkMovie(@NonNull Movie movie, boolean isBookmarked) {
+        movie.setBookmarked(isBookmarked);
+        return databaseService.movieDao().insertBookmarkedMovie(movie);
     }
 }
