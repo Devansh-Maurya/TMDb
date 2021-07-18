@@ -11,7 +11,7 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class BaseViewModel extends ViewModel {
 
-    private final CompositeDisposable compositeDisposable;
+    protected final CompositeDisposable compositeDisposable;
 
     protected BaseViewModel(CompositeDisposable compositeDisposable) {
         this.compositeDisposable = compositeDisposable;

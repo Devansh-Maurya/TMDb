@@ -1,0 +1,25 @@
+package maurya.devansh.tmdb.data.model;
+
+import androidx.annotation.Keep;
+
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
+/**
+ * Created by devansh on 18/07/21.
+ */
+
+@Keep
+public class MoviesList {
+    @SerializedName("page") int page = -1;
+    @SerializedName("results") List<Movie> results = null;
+
+    private void setPage(int page) {
+        this.page = page;
+    }
+
+    private void setResults(List<Movie> results) {
+        this.results = results;
+    }
+}

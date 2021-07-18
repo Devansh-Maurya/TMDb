@@ -28,6 +28,6 @@ public class HomeFragment extends DaggerBaseFragment<HomeViewModel, FragmentHome
 
     @Override
     protected void setupView(@NonNull @NotNull View view) {
-
+        viewModel.getTrendingMovies();
     }
 }
