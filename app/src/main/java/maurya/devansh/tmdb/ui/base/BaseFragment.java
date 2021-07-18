@@ -56,11 +56,11 @@ public abstract class BaseFragment<VB extends ViewBinding> extends Fragment {
         return binding;
     }
 
-    protected void showToast(@NonNull String message) {
+    protected void toast(@NonNull String message) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
 
-    protected void showToast(@StringRes int resId) {
+    protected void toast(@StringRes int resId) {
         Toast.makeText(requireContext(), resId, Toast.LENGTH_SHORT).show();
     }
 }
