@@ -79,6 +79,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 tools:text="@tools:sample/date/mmddyy" />
 
+            <CheckBox
+                android:id="@+id/buttonCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:button="@drawable/sl_bookmark"
+                android:buttonTint="@color/white"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
