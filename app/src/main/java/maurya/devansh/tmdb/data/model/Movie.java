@@ -14,13 +14,13 @@ import java.util.Objects;
 
 @Keep
 public class Movie {
-    @SerializedName("poster_path") public String posterPath = "";
-    @SerializedName("overview") public String overview = "";
-    @SerializedName("release_date") public String releaseDate = "";
-    @SerializedName("id") public int id = -1;
-    @SerializedName("title") public String title = "";
-    @SerializedName("original_language") public String originalLanguage = "";
-    @SerializedName("backdrop_path") public String backdropPath = "";
+    @SerializedName("poster_path") private String posterPath = "";
+    @SerializedName("overview") private String overview = "";
+    @SerializedName("release_date") private String releaseDate = "";
+    @SerializedName("id") private int id = -1;
+    @SerializedName("title") private String title = "";
+    @SerializedName("original_language") private String originalLanguage = "";
+    @SerializedName("backdrop_path") private String backdropPath = "";
 
     public static DiffUtil.ItemCallback<Movie> DIFF_CALLBACK = new DiffUtil.ItemCallback<Movie>() {
         @Override
@@ -34,32 +34,32 @@ public class Movie {
         }
     };
 
-    private void setPosterPath(String posterPath) {
-        this.posterPath = posterPath;
+    public String getPosterPath() {
+        return posterPath;
     }
 
-    private void setOverview(String overview) {
-        this.overview = overview;
+    public String getOverview() {
+        return overview;
     }
 
-    private void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
+    public String getReleaseDate() {
+        return releaseDate;
     }
 
-    private void setId(int id) {
-        this.id = id;
+    public int getId() {
+        return id;
     }
 
-    private void setTitle(String title) {
-        this.title = title;
+    public String getTitle() {
+        return title;
     }
 
-    private void setOriginalLanguage(String originalLanguage) {
-        this.originalLanguage = originalLanguage;
+    public String getOriginalLanguage() {
+        return originalLanguage;
     }
 
-    private void setBackdropPath(String backdropPath) {
-        this.backdropPath = backdropPath;
+    public String getBackdropPath() {
+        return backdropPath;
     }
 
     @Override

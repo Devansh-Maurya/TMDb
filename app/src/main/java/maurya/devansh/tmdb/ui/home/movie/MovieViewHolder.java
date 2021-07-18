@@ -30,10 +30,10 @@ public class MovieViewHolder extends BaseViewHolder<Movie, ItemMovieBinding> {
     @Override
     public void bind(@NonNull Movie data) {
         Glide.with(binding.ivPoster)
-                .load(ApiUtils.getTmdbImageUrl(data.posterPath))
+                .load(ApiUtils.getTmdbImageUrl(data.getPosterPath()))
                 .transition(DrawableTransitionOptions.withCrossFade(200))
                 .into(binding.ivPoster);
-        binding.tvTitle.setText(data.title);
-        binding.tvDate.setText(data.releaseDate);
+        binding.tvTitle.setText(data.getTitle());
+        binding.tvDate.setText(data.getReleaseDate());
     }
 }
