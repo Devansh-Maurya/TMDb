@@ -3,6 +3,9 @@ package maurya.devansh.tmdb.data.model;
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -13,14 +16,36 @@ import java.util.Objects;
  */
 
 @Keep
+@Entity
 public class Movie {
-    @SerializedName("poster_path") private String posterPath = "";
-    @SerializedName("overview") private String overview = "";
-    @SerializedName("release_date") private String releaseDate = "";
-    @SerializedName("id") private int id = -1;
-    @SerializedName("title") private String title = "";
-    @SerializedName("original_language") private String originalLanguage = "";
-    @SerializedName("backdrop_path") private String backdropPath = "";
+    @SerializedName("id")
+    @PrimaryKey
+    @ColumnInfo(name = "id")
+    private int id = -1;
+
+    @SerializedName("poster_path")
+    @ColumnInfo(name = "poster_path")
+    private String posterPath = "";
+
+    @SerializedName("overview")
+    @ColumnInfo(name = "overview")
+    private String overview = "";
+
+    @SerializedName("release_date")
+    @ColumnInfo(name = "release_date")
+    private String releaseDate = "";
+
+    @SerializedName("title")
+    @ColumnInfo(name = "title")
+    private String title = "";
+
+    @SerializedName("original_language")
+    @ColumnInfo(name = "original_language")
+    private String originalLanguage = "";
+
+    @SerializedName("backdrop_path")
+    @ColumnInfo(name = "backdrop_path")
+    private String backdropPath = "";
 
     public static DiffUtil.ItemCallback<Movie> DIFF_CALLBACK = new DiffUtil.ItemCallback<Movie>() {
         @Override
