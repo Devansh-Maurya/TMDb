@@ -58,8 +58,8 @@ public class MoviePagingDataSource extends PageKeyedDataSource<Integer, Movie> {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(moviesList -> {
-                    if (moviesList != null && !moviesList.results.isEmpty()) {
-                        callback.accept(moviesList.results);
+                    if (moviesList != null && !moviesList.getResults().isEmpty()) {
+                        callback.accept(moviesList.getResults());
                     }
                 }, throwable -> {
                     Log.e("Trending_error", "getTrendingMovies: " + throwable.toString());
