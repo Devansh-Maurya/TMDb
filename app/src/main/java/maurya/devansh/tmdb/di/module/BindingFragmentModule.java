@@ -3,6 +3,7 @@ package maurya.devansh.tmdb.di.module;
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 import maurya.devansh.tmdb.di.scope.PerFragment;
+import maurya.devansh.tmdb.ui.bookmark.BookmarksFragment;
 import maurya.devansh.tmdb.ui.home.HomeFragment;
 import maurya.devansh.tmdb.ui.home.HomeListFragment;
 
@@ -20,4 +21,8 @@ public abstract class BindingFragmentModule {
     @ContributesAndroidInjector(modules = {FragmentModule.class})
     @PerFragment
     public abstract HomeListFragment contributeHomeListFragment();
+
+    @ContributesAndroidInjector(modules = {FragmentModule.class})
+    @PerFragment
+    public abstract BookmarksFragment contributeBookmarksFragment();
 }

@@ -6,6 +6,7 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoMap;
 import maurya.devansh.tmdb.di.ViewModelKey;
+import maurya.devansh.tmdb.ui.bookmark.BookmarksViewModel;
 import maurya.devansh.tmdb.ui.home.HomeListViewModel;
 
 /**
@@ -19,4 +20,9 @@ public abstract class FragmentModule {
     @IntoMap
     @ViewModelKey(HomeListViewModel.class)
     public abstract ViewModel bindHomeListViewModel(HomeListViewModel homeListViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(BookmarksViewModel.class)
+    public abstract ViewModel bindBookmarksViewModel(BookmarksViewModel bookmarksViewModel);
 }
