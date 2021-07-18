@@ -10,4 +10,10 @@
         android:name="maurya.devansh.tmdb.ui.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/bookmarkFragment"
+        android:name="maurya.devansh.tmdb.ui.bookmark.BookmarksFragment"
+        android:label="fragment_bookmark"
+        tools:layout="@layout/fragment_bookmarks" />
 </navigation>
