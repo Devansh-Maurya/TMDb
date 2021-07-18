@@ -3,6 +3,7 @@ package maurya.devansh.tmdb.data.remote;
 import io.reactivex.Observable;
 import maurya.devansh.tmdb.data.model.MoviesList;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 /**
  * Created by devansh on 18/07/21.
@@ -12,5 +13,5 @@ import retrofit2.http.GET;
 public interface NetworkService {
 
     @GET("trending/movie/day")
-    Observable<MoviesList> getTrendingMovies();
+    Observable<MoviesList> getTrendingMovies(@Query("page") int page);
 }

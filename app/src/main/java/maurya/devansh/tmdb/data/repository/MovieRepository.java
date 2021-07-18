@@ -19,7 +19,7 @@ public class MovieRepository {
         this.networkService = networkService;
     }
 
-    public Observable<MoviesList> getTrendingMovies() {
-        return networkService.getTrendingMovies();
+    public Observable<MoviesList> getTrendingMovies(int page) {
+        return networkService.getTrendingMovies(page);
     }
 }

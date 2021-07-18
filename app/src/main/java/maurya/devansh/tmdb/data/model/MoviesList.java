@@ -12,8 +12,8 @@ import java.util.List;
 
 @Keep
 public class MoviesList {
-    @SerializedName("page") int page = -1;
-    @SerializedName("results") List<Movie> results = null;
+    @SerializedName("page") public int page = -1;
+    @SerializedName("results") public List<Movie> results = null;
 
     private void setPage(int page) {
         this.page = page;

@@ -1,6 +1,8 @@
 package maurya.devansh.tmdb.data.model;
 
 import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -19,6 +21,18 @@ public class Movie {
     @SerializedName("title") public String title = "";
     @SerializedName("original_language") public String originalLanguage = "";
     @SerializedName("backdrop_path") public String backdropPath = "";
+
+    public static DiffUtil.ItemCallback<Movie> DIFF_CALLBACK = new DiffUtil.ItemCallback<Movie>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Movie oldItem, @NonNull Movie newItem) {
+            return oldItem.id == newItem.id;
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Movie oldItem, @NonNull Movie newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
 
     private void setPosterPath(String posterPath) {
         this.posterPath = posterPath;

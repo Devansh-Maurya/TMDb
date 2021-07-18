@@ -28,6 +28,12 @@ public class HomeFragment extends DaggerBaseFragment<HomeViewModel, FragmentHome
 
     @Override
     protected void setupView(@NonNull @NotNull View view) {
-        viewModel.getTrendingMovies();
+    }
+
+    @Override
+    protected void setupObservers() {
+        viewModel.movieListLiveData.observe(getViewLifecycleOwner(), movies -> {
+            toast("" + movies.size());
+        });
     }
 }
