@@ -80,7 +80,7 @@
                 tools:text="@tools:sample/date/mmddyy" />
 
             <CheckBox
-                android:id="@+id/buttonCheckbox"
+                android:id="@+id/buttonBookmark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"

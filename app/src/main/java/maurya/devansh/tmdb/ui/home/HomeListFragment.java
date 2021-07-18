@@ -11,14 +11,17 @@ import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelStoreOwner;
 
 import maurya.devansh.tmdb.databinding.FragmentHomeListBinding;
+import maurya.devansh.tmdb.ui.base.Action;
+import maurya.devansh.tmdb.ui.base.ActionPerformer;
 import maurya.devansh.tmdb.ui.base.DaggerBaseFragment;
 import maurya.devansh.tmdb.ui.home.movie.MovieAdapter;
 
-public class HomeListFragment extends DaggerBaseFragment<HomeListViewModel, FragmentHomeListBinding> {
+public class HomeListFragment extends DaggerBaseFragment<HomeListViewModel, FragmentHomeListBinding>
+        implements ActionPerformer {
 
     private static final String TYPE = "type";
 
-    private final MovieAdapter movieAdapter = new MovieAdapter();
+    private final MovieAdapter movieAdapter = new MovieAdapter(this);
 
     public HomeListFragment() {
         // Required empty public constructor
@@ -55,5 +58,14 @@ public class HomeListFragment extends DaggerBaseFragment<HomeListViewModel, Frag
             binding().progressBar.setVisibility(View.GONE);
             movieAdapter.submitList(movies);
         });
+    }
+
+    @Override
+    public void performAction(Action action) {
+        if (action instanceof Action.MovieBookmarked) {
+            Action.MovieBookmarked movieBookmarked = (Action.MovieBookmarked) action;
+            movieBookmarked.movie.setBookmarked(movieBookmarked.isBookmarked);
+            toast(movieBookmarked.movie.getTitle() + movieBookmarked.isBookmarked);
+        }
     }
 }

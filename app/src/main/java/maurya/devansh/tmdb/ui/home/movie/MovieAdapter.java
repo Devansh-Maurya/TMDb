@@ -8,6 +8,7 @@ import androidx.paging.PagedListAdapter;
 
 import maurya.devansh.tmdb.R;
 import maurya.devansh.tmdb.data.model.Movie;
+import maurya.devansh.tmdb.ui.base.ActionPerformer;
 
 /**
  * Created by devansh on 18/07/21.
@@ -15,8 +16,11 @@ import maurya.devansh.tmdb.data.model.Movie;
 
 public class MovieAdapter extends PagedListAdapter<Movie, MovieViewHolder> {
 
-    public MovieAdapter() {
+    private final ActionPerformer actionPerformer;
+
+    public MovieAdapter(ActionPerformer actionPerformer) {
         super(Movie.DIFF_CALLBACK);
+        this.actionPerformer = actionPerformer;
     }
 
     @NonNull
@@ -24,7 +28,8 @@ public class MovieAdapter extends PagedListAdapter<Movie, MovieViewHolder> {
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new MovieViewHolder(
                 LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_movie, parent, false)
+                        .inflate(R.layout.item_movie, parent, false),
+                actionPerformer
         );
     }
 
