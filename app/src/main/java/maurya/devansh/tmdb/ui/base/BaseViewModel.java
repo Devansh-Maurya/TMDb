@@ -9,7 +9,7 @@ import io.reactivex.disposables.CompositeDisposable;
  * Created by devansh on 17/07/21.
  */
 
-public class BaseViewModel extends ViewModel {
+public abstract class BaseViewModel extends ViewModel {
 
     protected final CompositeDisposable compositeDisposable;
 

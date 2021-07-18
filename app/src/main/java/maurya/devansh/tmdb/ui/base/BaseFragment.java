@@ -52,7 +52,10 @@ public abstract class BaseFragment<VB extends ViewBinding> extends Fragment {
     protected void setupObservers() {
     }
 
+    @NonNull
     protected VB getBinding() {
+        if (binding == null)
+            throw new IllegalStateException("Should not attempt to get bindings when Fragment views are destroyed.");
         return binding;
     }
 
