@@ -48,8 +48,7 @@ public class HomeListFragment extends DaggerBaseFragment<HomeListViewModel, Frag
 
     @Override
     protected void setupView(@NonNull View view) {
-        FragmentHomeListBinding binding = binding();
-        binding.recyclerView.setAdapter(movieAdapter);
+        binding().recyclerView.setAdapter(movieAdapter);
     }
 
     @Override

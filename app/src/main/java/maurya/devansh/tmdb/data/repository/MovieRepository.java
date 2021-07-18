@@ -1,6 +1,7 @@
 package maurya.devansh.tmdb.data.repository;
 
 import androidx.annotation.NonNull;
+import androidx.paging.DataSource;
 
 import javax.inject.Inject;
 
@@ -33,12 +34,10 @@ public class MovieRepository {
                 return getTrendingMovies(page);
             case MoviesList.TYPE_NOW_PLAYING:
                 return getTrendingMovies(page);
-            case MoviesList.TYPE_BOOKMARKED:
-                return getTrendingMovies(page);
             case MoviesList.TYPE_SEARCH_RESULT:
                 return getTrendingMovies(page);
             default:
-                throw new IllegalArgumentException("Invalid movie list type: " + type);
+                throw new IllegalArgumentException("Invalid Single movie list type: " + type);
         }
     }
 
@@ -48,6 +47,10 @@ public class MovieRepository {
 
     private Single<MoviesList> getNowPlayingMovies(int page) {
         return networkService.getNowPlayingMovies(page, "IN");
+    }
+
+    public DataSource.Factory<Integer, Movie> getBookmarkedMovies() {
+        return databaseService.movieDao().getBookmarkedMovies();
     }
 
     public Completable bookmarkMovie(@NonNull Movie movie, boolean isBookmarked) {
