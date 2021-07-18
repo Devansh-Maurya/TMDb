@@ -47,6 +47,9 @@ public class Movie {
     @ColumnInfo(name = "backdrop_path")
     private String backdropPath = "";
 
+    @ColumnInfo(name = "is_bookmarked")
+    private int isBookmarked = 0;
+
     public static DiffUtil.ItemCallback<Movie> DIFF_CALLBACK = new DiffUtil.ItemCallback<Movie>() {
         @Override
         public boolean areItemsTheSame(@NonNull Movie oldItem, @NonNull Movie newItem) {
@@ -58,6 +61,24 @@ public class Movie {
             return oldItem.equals(newItem);
         }
     };
+
+    public Movie(int id,
+                 String posterPath,
+                 String overview,
+                 String releaseDate,
+                 String title,
+                 String originalLanguage,
+                 String backdropPath,
+                 int isBookmarked) {
+        this.id = id;
+        this.posterPath = posterPath;
+        this.overview = overview;
+        this.releaseDate = releaseDate;
+        this.title = title;
+        this.originalLanguage = originalLanguage;
+        this.backdropPath = backdropPath;
+        this.isBookmarked = isBookmarked;
+    }
 
     public String getPosterPath() {
         return posterPath;
@@ -85,6 +106,10 @@ public class Movie {
 
     public String getBackdropPath() {
         return backdropPath;
+    }
+
+    public int isBookmarked() {
+        return isBookmarked;
     }
 
     @Override

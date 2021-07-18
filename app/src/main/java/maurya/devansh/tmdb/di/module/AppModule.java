@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.room.Room;
 
 import com.naman14.spider.SpiderInterceptor;
 
@@ -13,6 +14,7 @@ import dagger.Module;
 import dagger.Provides;
 import io.reactivex.disposables.CompositeDisposable;
 import maurya.devansh.tmdb.BuildConfig;
+import maurya.devansh.tmdb.data.local.db.DatabaseService;
 import maurya.devansh.tmdb.data.remote.AuthorizationInterceptor;
 import maurya.devansh.tmdb.data.remote.NetworkService;
 import maurya.devansh.tmdb.di.qualifier.ApplicationContext;
@@ -69,5 +71,11 @@ public class AppModule {
     @Singleton
     public NetworkService provideNetworkService(@NonNull Retrofit retrofit) {
         return retrofit.create(NetworkService.class);
+    }
+
+    @Provides
+    @Singleton
+    public DatabaseService provideDatabaseService(@ApplicationContext Context context) {
+        return Room.databaseBuilder(context, DatabaseService.class, "tmdb-devansh-maurya-db").build();
     }
 }
