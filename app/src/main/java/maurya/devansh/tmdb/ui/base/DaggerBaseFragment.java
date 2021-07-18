@@ -4,7 +4,9 @@ import android.os.Bundle;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.Nullable;
+import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.viewbinding.ViewBinding;
 
 import javax.inject.Inject;
@@ -20,15 +22,18 @@ public abstract class DaggerBaseFragment<VM extends BaseViewModel, VB extends Vi
     protected VM viewModel;
 
     @Inject
-    ViewModelProvider.Factory viewModelFactory;
+    protected ViewModelProvider.Factory viewModelFactory;
 
     @Override
     @CallSuper
     public void onCreate(@Nullable Bundle savedInstanceState) {
         AndroidSupportInjection.inject(this);
         super.onCreate(savedInstanceState);
-        viewModel = provideViewModel();
+
+        Pair<ViewModelStoreOwner, Class<VM>> vmCreators = provideViewModelCreators();
+        viewModel = (new ViewModelProvider(vmCreators.first, viewModelFactory))
+                .get(vmCreators.second);
     }
 
-    protected abstract VM provideViewModel();
+    protected abstract Pair<ViewModelStoreOwner, Class<VM>> provideViewModelCreators();
 }

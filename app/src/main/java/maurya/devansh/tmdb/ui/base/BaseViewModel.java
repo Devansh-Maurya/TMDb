@@ -9,22 +9,18 @@ import io.reactivex.disposables.CompositeDisposable;
  * Created by devansh on 17/07/21.
  */
 
-public class BaseViewModel extends ViewModel {
+public abstract class BaseViewModel extends ViewModel {
 
-    private final CompositeDisposable _compositeDisposable;
+    protected final CompositeDisposable compositeDisposable;
 
-    BaseViewModel(CompositeDisposable compositeDisposable) {
-        _compositeDisposable = compositeDisposable;
-    }
-
-    public CompositeDisposable getCompositeDisposable() {
-        return _compositeDisposable;
+    protected BaseViewModel(CompositeDisposable compositeDisposable) {
+        this.compositeDisposable = compositeDisposable;
     }
 
     @Override
     @CallSuper
     protected void onCleared() {
         super.onCleared();
-        _compositeDisposable.dispose();
+        compositeDisposable.dispose();
     }
 }

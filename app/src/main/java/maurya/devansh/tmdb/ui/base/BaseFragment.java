@@ -28,7 +28,7 @@ public abstract class BaseFragment<VB extends ViewBinding> extends Fragment {
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState
     ) {
-        binding = provideViewBinding();
+        binding = provideViewBinding(inflater, container);
         setupObservers();
         return binding != null ? binding.getRoot() : null;
     }
@@ -45,22 +45,25 @@ public abstract class BaseFragment<VB extends ViewBinding> extends Fragment {
         binding = null;
     }
 
-    protected abstract VB provideViewBinding();
+    protected abstract VB provideViewBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container);
 
     protected abstract void setupView(@NonNull View view);
 
     protected void setupObservers() {
     }
 
-    protected VB getBinding() {
+    @NonNull
+    protected VB binding() {
+        if (binding == null)
+            throw new IllegalStateException("Should not attempt to get bindings when Fragment views are destroyed.");
         return binding;
     }
 
-    protected void showToast(String message) {
+    protected void toast(@NonNull String message) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
 
-    protected void showToast(@StringRes int resId) {
+    protected void toast(@StringRes int resId) {
         Toast.makeText(requireContext(), resId, Toast.LENGTH_SHORT).show();
     }
 }
