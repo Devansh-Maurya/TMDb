@@ -53,7 +53,7 @@ public abstract class BaseFragment<VB extends ViewBinding> extends Fragment {
     }
 
     @NonNull
-    protected VB getBinding() {
+    protected VB binding() {
         if (binding == null)
             throw new IllegalStateException("Should not attempt to get bindings when Fragment views are destroyed.");
         return binding;

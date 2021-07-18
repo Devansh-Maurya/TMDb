@@ -24,9 +24,9 @@ public class HomeListFragment extends DaggerBaseFragment<HomeViewModel, Fragment
         // Required empty public constructor
     }
 
-    public static HomeListFragment newInstance(String type) {
+    public static HomeListFragment newInstance(int type) {
         Bundle args = new Bundle();
-        args.putString(TYPE, type);
+        args.putInt(TYPE, type);
 
         HomeListFragment fragment = new HomeListFragment();
         fragment.setArguments(args);
@@ -45,7 +45,7 @@ public class HomeListFragment extends DaggerBaseFragment<HomeViewModel, Fragment
 
     @Override
     protected void setupView(@NonNull View view) {
-        FragmentHomeListBinding binding = getBinding();
+        FragmentHomeListBinding binding = binding();
         binding.recyclerView.setAdapter(movieAdapter);
     }
 
