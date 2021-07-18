@@ -14,7 +14,8 @@ import java.util.List;
 public class MoviesList {
     @SerializedName("page") public int page = -1;
     @SerializedName("results") public List<Movie> results = null;
-
+    // TODO: 18/07/21 Fix here
+    public static final int TYPE_UNDEFINED = 0;
     public static final int TYPE_TRENDING = 1;
     public static final int TYPE_NOW_PLAYING = 2;
     public static final int TYPE_SEARCH_RESULT = 3;

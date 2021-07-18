@@ -21,11 +21,11 @@ import maurya.devansh.tmdb.data.model.Tab;
 import maurya.devansh.tmdb.databinding.FragmentHomeBinding;
 import maurya.devansh.tmdb.ui.base.DaggerBaseFragment;
 
-public class HomeFragment extends DaggerBaseFragment<HomeViewModel, FragmentHomeBinding> {
+public class HomeFragment extends DaggerBaseFragment<HomeListViewModel, FragmentHomeBinding> {
 
     @Override
-    protected Pair<ViewModelStoreOwner, Class<HomeViewModel>> provideViewModelCreators() {
-        return new Pair<>(this, HomeViewModel.class);
+    protected Pair<ViewModelStoreOwner, Class<HomeListViewModel>> provideViewModelCreators() {
+        return new Pair<>(this, HomeListViewModel.class);
     }
 
     @Override

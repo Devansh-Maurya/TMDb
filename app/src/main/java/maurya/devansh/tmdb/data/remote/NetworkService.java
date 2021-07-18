@@ -14,4 +14,7 @@ public interface NetworkService {
 
     @GET("trending/movie/day")
     Single<MoviesList> getTrendingMovies(@Query("page") int page);
+
+    @GET("movie/now_playing")
+    Single<MoviesList> getNowPlayingMovies(@Query("page") int page, @Query("region") String region);
 }

@@ -14,7 +14,7 @@ import maurya.devansh.tmdb.databinding.FragmentHomeListBinding;
 import maurya.devansh.tmdb.ui.base.DaggerBaseFragment;
 import maurya.devansh.tmdb.ui.home.movie.MovieAdapter;
 
-public class HomeListFragment extends DaggerBaseFragment<HomeViewModel, FragmentHomeListBinding> {
+public class HomeListFragment extends DaggerBaseFragment<HomeListViewModel, FragmentHomeListBinding> {
 
     private static final String TYPE = "type";
 
@@ -34,8 +34,8 @@ public class HomeListFragment extends DaggerBaseFragment<HomeViewModel, Fragment
     }
 
     @Override
-    protected Pair<ViewModelStoreOwner, Class<HomeViewModel>> provideViewModelCreators() {
-        return new Pair<>(this, HomeViewModel.class);
+    protected Pair<ViewModelStoreOwner, Class<HomeListViewModel>> provideViewModelCreators() {
+        return new Pair<>(this, HomeListViewModel.class);
     }
 
     @Override

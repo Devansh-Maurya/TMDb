@@ -38,4 +38,8 @@ public class MovieRepository {
     private Single<MoviesList> getTrendingMovies(int page) {
         return networkService.getTrendingMovies(page);
     }
+
+    private Single<MoviesList> getNowPlayingMovies(int page) {
+        return networkService.getNowPlayingMovies(page, "IN");
+    }
 }
