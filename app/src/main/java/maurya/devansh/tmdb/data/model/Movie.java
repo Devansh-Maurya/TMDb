@@ -116,6 +116,10 @@ public class Movie {
         isBookmarked = bookmarked ? 1 : 0;
     }
 
+    public boolean bookmarked() {
+        return isBookmarked == 1;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
