@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import javax.inject.Inject;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import maurya.devansh.tmdb.data.local.db.DatabaseService;
 import maurya.devansh.tmdb.data.model.Movie;
@@ -49,8 +50,12 @@ public class MovieRepository {
         return networkService.getNowPlayingMovies(page, "IN");
     }
 
-    public Single<Long> bookmarkMovie(@NonNull Movie movie, boolean isBookmarked) {
-        movie.setBookmarked(isBookmarked);
-        return databaseService.movieDao().insertBookmarkedMovie(movie);
+    public Completable bookmarkMovie(@NonNull Movie movie, boolean isBookmarked) {
+        if (isBookmarked) {
+            movie.setBookmarked(true);
+            return databaseService.movieDao().insertBookmarkedMovie(movie);
+        } else {
+            return databaseService.movieDao().deleteBookmarkedMovie(movie);
+        }
     }
 }
