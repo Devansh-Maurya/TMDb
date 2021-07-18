@@ -17,6 +17,8 @@ public class MoviesList {
 
     public static final int TYPE_TRENDING = 1;
     public static final int TYPE_NOW_PLAYING = 2;
+    public static final int TYPE_SEARCH_RESULT = 3;
+    public static final int TYPE_BOOKMARKED = 4;
 
     private void setPage(int page) {
         this.page = page;

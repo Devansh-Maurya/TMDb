@@ -1,6 +1,6 @@
 package maurya.devansh.tmdb.data.remote;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
 import maurya.devansh.tmdb.data.model.MoviesList;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -13,5 +13,5 @@ import retrofit2.http.Query;
 public interface NetworkService {
 
     @GET("trending/movie/day")
-    Observable<MoviesList> getTrendingMovies(@Query("page") int page);
+    Single<MoviesList> getTrendingMovies(@Query("page") int page);
 }

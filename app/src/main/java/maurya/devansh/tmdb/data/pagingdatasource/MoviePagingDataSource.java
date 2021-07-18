@@ -13,6 +13,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import maurya.devansh.tmdb.data.model.Movie;
+import maurya.devansh.tmdb.data.model.MoviesList;
 import maurya.devansh.tmdb.data.repository.MovieRepository;
 
 /**
@@ -47,7 +48,7 @@ public class MoviePagingDataSource extends PageKeyedDataSource<Integer, Movie> {
     }
 
     private void getData(final int page, final Consumer<List<Movie>> callback) {
-        compositeDisposable.add(movieRepository.getTrendingMovies(page)
+        compositeDisposable.add(movieRepository.getMoviesList(MoviesList.TYPE_TRENDING, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(moviesList -> {
