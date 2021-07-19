@@ -8,9 +8,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelStoreOwner;
+import androidx.paging.PagedList;
 
 import org.jetbrains.annotations.NotNull;
 
+import maurya.devansh.tmdb.data.model.Movie;
 import maurya.devansh.tmdb.databinding.FragmentBookmarksBinding;
 import maurya.devansh.tmdb.ui.base.Action;
 import maurya.devansh.tmdb.ui.base.ActionPerformer;
@@ -47,6 +49,10 @@ public class BookmarksFragment extends DaggerBaseFragment<BookmarksViewModel, Fr
 
     @Override
     public void performAction(Action action) {
-
+        // FIXME: 19/07/21 Logic looks correct, need to update DB to see working
+        PagedList<Movie> pagedList = viewModel.movieListLiveData.getValue();
+        if (pagedList != null) {
+            pagedList.getDataSource().invalidate();
+        }
     }
 }
