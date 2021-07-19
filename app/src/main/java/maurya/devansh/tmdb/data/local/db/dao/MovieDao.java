@@ -9,8 +9,8 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 
 import io.reactivex.Completable;
+import maurya.devansh.tmdb.data.model.BookmarkedMovie;
 import maurya.devansh.tmdb.data.model.Movie;
-import maurya.devansh.tmdb.data.model.MovieId;
 
 /**
  * Created by devansh on 18/07/21.
@@ -20,13 +20,13 @@ import maurya.devansh.tmdb.data.model.MovieId;
 public interface MovieDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void bookmarkMovie(MovieId movieId, Movie movie);
+    void bookmarkMovie(BookmarkedMovie movieId, Movie movie);
 
     @Delete
-    Completable deleteBookmarkedMovie(MovieId movieId);
+    Completable deleteBookmarkedMovie(BookmarkedMovie movieId);
 
     // TODO: 18/07/21 Add order query
     @Transaction
-    @Query("SELECT * FROM movie WHERE id IN (SELECT movie_id.id FROM movie_id)")
+    @Query("SELECT * FROM movie WHERE id IN (SELECT bookmarked_movie.id FROM bookmarked_movie)")
     DataSource.Factory<Integer, Movie> getBookmarkedMovies();
 }

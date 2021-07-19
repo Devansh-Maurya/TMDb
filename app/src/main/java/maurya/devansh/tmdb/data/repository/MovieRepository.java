@@ -8,8 +8,8 @@ import javax.inject.Inject;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import maurya.devansh.tmdb.data.local.db.DatabaseService;
+import maurya.devansh.tmdb.data.model.BookmarkedMovie;
 import maurya.devansh.tmdb.data.model.Movie;
-import maurya.devansh.tmdb.data.model.MovieId;
 import maurya.devansh.tmdb.data.model.MoviesList;
 import maurya.devansh.tmdb.data.remote.NetworkService;
 import maurya.devansh.tmdb.utils.common.MoviesListType;
@@ -55,7 +55,7 @@ public class MovieRepository {
     }
 
     public Completable bookmarkMovie(@NonNull Movie movie, boolean isBookmarked) {
-        MovieId movieId = new MovieId(movie.id);
+        BookmarkedMovie movieId = new BookmarkedMovie(movie.id);
         movie.setBookmarked(isBookmarked);
         if (isBookmarked) {
             return Completable.fromRunnable(() -> databaseService.movieDao().bookmarkMovie(movieId, movie));

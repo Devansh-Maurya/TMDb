@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
@@ -47,7 +48,7 @@ public class Movie {
     @ColumnInfo(name = "backdrop_path")
     public final String backdropPath;
 
-    @ColumnInfo(name = "is_bookmarked")
+    @Ignore
     public int isBookmarked;
 
     public static DiffUtil.ItemCallback<Movie> DIFF_CALLBACK = new DiffUtil.ItemCallback<Movie>() {
@@ -68,8 +69,8 @@ public class Movie {
                  String releaseDate,
                  String title,
                  String originalLanguage,
-                 String backdropPath,
-                 int isBookmarked) {
+                 String backdropPath
+    ) {
         this.id = id;
         this.posterPath = posterPath;
         this.overview = overview;
@@ -77,6 +78,18 @@ public class Movie {
         this.title = title;
         this.originalLanguage = originalLanguage;
         this.backdropPath = backdropPath;
+    }
+
+    @Ignore
+    public Movie(int id,
+                 String posterPath,
+                 String overview,
+                 String releaseDate,
+                 String title,
+                 String originalLanguage,
+                 String backdropPath,
+                 int isBookmarked) {
+        this(id, posterPath, overview, releaseDate, title, originalLanguage, backdropPath);
         this.isBookmarked = isBookmarked;
     }
 
