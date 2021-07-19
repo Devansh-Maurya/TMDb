@@ -21,34 +21,34 @@ public class Movie {
     @SerializedName("id")
     @PrimaryKey
     @ColumnInfo(name = "id")
-    private int id = -1;
+    public final int id;
 
     @SerializedName("poster_path")
     @ColumnInfo(name = "poster_path")
-    private String posterPath = "";
+    public final String posterPath;
 
     @SerializedName("overview")
     @ColumnInfo(name = "overview")
-    private String overview = "";
+    public final String overview;
 
     @SerializedName("release_date")
     @ColumnInfo(name = "release_date")
-    private String releaseDate = "";
+    public final String releaseDate;
 
     @SerializedName("title")
     @ColumnInfo(name = "title")
-    private String title = "";
+    public final String title;
 
     @SerializedName("original_language")
     @ColumnInfo(name = "original_language")
-    private String originalLanguage = "";
+    public final String originalLanguage;
 
     @SerializedName("backdrop_path")
     @ColumnInfo(name = "backdrop_path")
-    private String backdropPath = "";
+    public final String backdropPath;
 
     @ColumnInfo(name = "is_bookmarked")
-    private int isBookmarked = 0;
+    public int isBookmarked;
 
     public static DiffUtil.ItemCallback<Movie> DIFF_CALLBACK = new DiffUtil.ItemCallback<Movie>() {
         @Override
@@ -78,38 +78,6 @@ public class Movie {
         this.originalLanguage = originalLanguage;
         this.backdropPath = backdropPath;
         this.isBookmarked = isBookmarked;
-    }
-
-    public String getPosterPath() {
-        return posterPath;
-    }
-
-    public String getOverview() {
-        return overview;
-    }
-
-    public String getReleaseDate() {
-        return releaseDate;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getOriginalLanguage() {
-        return originalLanguage;
-    }
-
-    public String getBackdropPath() {
-        return backdropPath;
-    }
-
-    public int isBookmarked() {
-        return isBookmarked;
     }
 
     public void setBookmarked(boolean bookmarked) {

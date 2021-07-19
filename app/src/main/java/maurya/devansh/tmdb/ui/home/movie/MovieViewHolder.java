@@ -32,11 +32,11 @@ public class MovieViewHolder extends BaseViewHolder<Movie, ItemMovieBinding> {
     @Override
     public void bind(@NonNull Movie data) {
         Glide.with(binding.ivPoster)
-                .load(ApiUtils.getTmdbImageUrl(data.getPosterPath()))
+                .load(ApiUtils.getTmdbImageUrl(data.posterPath))
                 .transition(DrawableTransitionOptions.withCrossFade(200))
                 .into(binding.ivPoster);
-        binding.tvTitle.setText(data.getTitle());
-        binding.tvDate.setText(data.getReleaseDate());
+        binding.tvTitle.setText(data.title);
+        binding.tvDate.setText(data.releaseDate);
 
         binding.buttonBookmark.setOnCheckedChangeListener(((buttonView, isChecked) ->
                 performAction(new Action.MovieBookmarked(data, isChecked))
