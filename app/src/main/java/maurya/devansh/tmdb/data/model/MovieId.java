@@ -10,7 +10,7 @@ import java.util.Objects;
  * Created by devansh on 19/07/21.
  */
 
-@Entity
+@Entity(tableName = "movie_id")
 public class MovieId {
 
     @PrimaryKey

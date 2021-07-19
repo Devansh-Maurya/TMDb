@@ -9,6 +9,7 @@ import io.reactivex.Completable;
 import io.reactivex.Single;
 import maurya.devansh.tmdb.data.local.db.DatabaseService;
 import maurya.devansh.tmdb.data.model.Movie;
+import maurya.devansh.tmdb.data.model.MovieId;
 import maurya.devansh.tmdb.data.model.MoviesList;
 import maurya.devansh.tmdb.data.remote.NetworkService;
 import maurya.devansh.tmdb.utils.common.MoviesListType;
@@ -54,11 +55,12 @@ public class MovieRepository {
     }
 
     public Completable bookmarkMovie(@NonNull Movie movie, boolean isBookmarked) {
+        MovieId movieId = new MovieId(movie.id);
+        movie.setBookmarked(isBookmarked);
         if (isBookmarked) {
-            movie.setBookmarked(true);
-            return databaseService.movieDao().insertBookmarkedMovie(movie);
+            return Completable.fromRunnable(() -> databaseService.movieDao().bookmarkMovie(movieId, movie));
         } else {
-            return databaseService.movieDao().deleteBookmarkedMovie(movie);
+            return databaseService.movieDao().deleteBookmarkedMovie(movieId);
         }
     }
 }
