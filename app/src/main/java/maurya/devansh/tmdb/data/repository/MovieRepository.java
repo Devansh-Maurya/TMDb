@@ -2,9 +2,11 @@ package maurya.devansh.tmdb.data.repository;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-import androidx.paging.DataSource;
-import androidx.paging.LivePagedListBuilder;
+import androidx.paging.LoadType;
 import androidx.paging.PagedList;
+import androidx.paging.PagingSource;
+import androidx.paging.PagingState;
+import androidx.paging.rxjava2.RxRemoteMediator;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -77,13 +79,14 @@ public class MovieRepository {
             .setPageSize(20)
             .build();
 
-        return new LivePagedListBuilder<>(databaseService.movieDao().getMovies(type), config)
-            .setBoundaryCallback(
-                new MoviesListBoundaryCallback(
-                    this, MoviesList.TYPE_TRENDING, compositeDisposable
-                )
-            )
-            .build();
+//        return new LivePagedListBuilder<>(databaseService.movieDao().getMovies(type), config)
+//            .setBoundaryCallback(
+//                new MoviesListBoundaryCallback(
+//                    this, MoviesList.TYPE_TRENDING, compositeDisposable
+//                )
+//            )
+//            .build();
+        return null;
     }
 
     private Single<MoviesList> getTrendingMoviesFromNetwork(int page) {
@@ -94,7 +97,7 @@ public class MovieRepository {
         return networkService.getNowPlayingMovies(page, "IN");
     }
 
-    public DataSource.Factory<Integer, Movie> getBookmarkedMovies() {
+    public PagingSource<Integer, Movie> getBookmarkedMovies() {
         return databaseService.movieDao().getBookmarkedMovies();
     }
 
@@ -181,6 +184,57 @@ public class MovieRepository {
                     break;
             }
             pageNumber++;
+        }
+    }
+
+
+    private static class MoviesRemoteMediator extends RxRemoteMediator<Integer, Movie> {
+
+        private final MovieRepository movieRepository;
+        @MoviesListType private final int movieListType;
+        private final CompositeDisposable compositeDisposable;
+
+        private final PagingRequestHelper helper = new PagingRequestHelper(Executors.newSingleThreadExecutor());
+        private int pageNumber = 1;
+
+        public MoviesRemoteMediator(
+            MovieRepository movieRepository,
+            @MoviesListType int movieListType,
+            CompositeDisposable compositeDisposable
+        ) {
+            this.movieRepository = movieRepository;
+            this.movieListType = movieListType;
+            this.compositeDisposable = compositeDisposable;
+        }
+
+        @NonNull
+        @Override
+        public Single<MediatorResult> loadSingle(
+            @NonNull LoadType loadType,
+            @NonNull PagingState<Integer, Movie> pagingState
+        ) {
+            switch (loadType) {
+                case REFRESH:
+                    break;
+                case PREPEND:
+                    // Never need to prepend, Immediately return, reporting end of pagination.
+                    // pagination.
+                    return Single.just(new MediatorResult.Success(true));
+                case APPEND:
+//                    User lastItem = state.lastItemOrNull();
+//
+//                    // You must explicitly check if the last item is null when appending,
+//                    // since passing null to networkService is only valid for initial load.
+//                    // If lastItem is null it means no items were loaded after the initial
+//                    // REFRESH and there are no more items to load.
+//                    if (lastItem == null) {
+//                        return Single.just(new MediatorResult.Success(true));
+//                    }
+//
+//                    loadKey = lastItem.getId();
+                    break;
+            }
+            return null;
         }
     }
 }

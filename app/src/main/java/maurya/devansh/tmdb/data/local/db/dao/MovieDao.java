@@ -1,6 +1,6 @@
 package maurya.devansh.tmdb.data.local.db.dao;
 
-import androidx.paging.DataSource;
+import androidx.paging.PagingSource;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -54,17 +54,17 @@ public abstract class MovieDao {
     // TODO: 18/07/21 Add order query
     @Transaction
     @Query("SELECT * FROM movie WHERE id IN (SELECT bookmarked_movie.id FROM bookmarked_movie) ORDER BY timestamp")
-    public abstract DataSource.Factory<Integer, Movie> getBookmarkedMovies();
+    public abstract PagingSource<Integer, Movie> getBookmarkedMovies();
 
     @Transaction
     @Query("SELECT * FROM movie WHERE id IN (SELECT trending_movie.id FROM trending_movie)")
-    public abstract DataSource.Factory<Integer, Movie> getTrendingMovies();
+    public abstract PagingSource<Integer, Movie> getTrendingMovies();
 
     @Transaction
     @Query("SELECT * FROM movie WHERE id IN (SELECT trending_movie.id FROM trending_movie)")
-    public abstract DataSource.Factory<Integer, Movie> getNowPlayingMovies();
+    public abstract PagingSource<Integer, Movie> getNowPlayingMovies();
 
-    public DataSource.Factory<Integer, Movie> getMovies(@MoviesListType int type) {
+    public PagingSource<Integer, Movie> getMovies(@MoviesListType int type) {
         switch (type) {
             case MoviesList.TYPE_TRENDING:
                 return getTrendingMovies();
