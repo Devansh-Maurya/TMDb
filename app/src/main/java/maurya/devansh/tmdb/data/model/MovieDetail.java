@@ -1,5 +1,7 @@
 package maurya.devansh.tmdb.data.model;
 
+import android.text.TextUtils;
+
 import androidx.annotation.Keep;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -8,7 +10,10 @@ import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * Created by devansh on 21/07/21.
@@ -66,6 +71,31 @@ public class MovieDetail {
         this.runtime = runtime;
         this.genres = genres;
         this.overview = overview;
+    }
+
+    public String getInfoString() {
+        String infoSeparator = " | ";
+        StringBuilder info = new StringBuilder();
+        info.append(releaseDate);
+        info.append(infoSeparator);
+
+        long runtimeHour = TimeUnit.MINUTES.toHours(runtime);
+        if (runtimeHour != 0) {
+            info.append(runtimeHour).append(" h ");
+        }
+        long runtimeRemainingMinutes = runtime - TimeUnit.HOURS.toMinutes(runtimeHour);
+        info.append(runtimeRemainingMinutes).append(" min");
+
+        info.append(infoSeparator);
+        info.append(originalLanguage.toUpperCase(Locale.ROOT));
+
+        info.append("\n");
+        List<String> genreNames = genres.stream()
+            .map(genre -> genre.name)
+            .collect(Collectors.toList());
+        info.append(TextUtils.join(", ", genreNames));
+
+        return info.toString();
     }
 
     @Override

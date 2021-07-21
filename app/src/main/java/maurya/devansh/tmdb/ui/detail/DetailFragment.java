@@ -57,6 +57,8 @@ public class DetailFragment extends DaggerBaseFragment<DetailViewModel, Fragment
             .load(posterUrl)
             .into(binding().ivPoster);
         binding().tvTitle.setText(data.title);
+        binding().tvInfo.setText(data.getInfoString());
+        binding().tvOverview.setText(data.overview);
     }
 
     @Override
