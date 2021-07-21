@@ -48,19 +48,14 @@ public class SearchFragment extends DaggerBaseFragment<SearchViewModel, Fragment
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    // perform query here
-                    toast(query);
-
                     // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
                     // see https://code.google.com/p/android/issues/detail?id=24599
                     searchView.clearFocus();
-
                     return true;
                 }
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
-                    toast(newText);
                     viewModel.getSearchResults(newText);
                     return false;
                 }
