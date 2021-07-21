@@ -14,9 +14,15 @@ import org.jetbrains.annotations.NotNull;
 
 import maurya.devansh.tmdb.R;
 import maurya.devansh.tmdb.databinding.FragmentSearchBinding;
+import maurya.devansh.tmdb.ui.base.Action;
+import maurya.devansh.tmdb.ui.base.ActionPerformer;
 import maurya.devansh.tmdb.ui.base.DaggerBaseFragment;
+import maurya.devansh.tmdb.ui.home.movie.MovieAdapter;
 
-public class SearchFragment extends DaggerBaseFragment<SearchViewModel, FragmentSearchBinding> {
+public class SearchFragment extends DaggerBaseFragment<SearchViewModel, FragmentSearchBinding>
+    implements ActionPerformer {
+
+    private final MovieAdapter movieAdapter = new MovieAdapter(this);
 
     @Override
     protected Pair<ViewModelStoreOwner, Class<SearchViewModel>> provideViewModelCreators() {
@@ -30,7 +36,11 @@ public class SearchFragment extends DaggerBaseFragment<SearchViewModel, Fragment
 
     @Override
     protected void setupView(@NonNull @NotNull View view) {
-        setHasOptionsMenu(true);
+        binding().recyclerView.setAdapter(movieAdapter);
+        setupSearchBar();
+    }
+
+    private void setupSearchBar() {
         binding().toolbar.inflateMenu(R.menu.menu_search);
         binding().toolbar.setOnMenuItemClickListener(menuItem -> {
             final SearchView searchView = (SearchView) menuItem.getActionView();
@@ -50,11 +60,25 @@ public class SearchFragment extends DaggerBaseFragment<SearchViewModel, Fragment
                 @Override
                 public boolean onQueryTextChange(String newText) {
                     toast(newText);
+                    viewModel.getSearchResults(newText);
                     return false;
                 }
             });
 
             return true;
         });
+    }
+
+    @Override
+    protected void setupObservers() {
+        viewModel.searchResultsLiveData.observe(getViewLifecycleOwner(), movies -> {
+            binding().progressBar.setVisibility(View.GONE);
+            movieAdapter.submitData(getViewLifecycleOwner().getLifecycle(), movies);
+        });
+    }
+
+    @Override
+    public void performAction(Action action) {
+
     }
 }
