@@ -29,6 +29,7 @@ import maurya.devansh.tmdb.data.model.BookmarkedMovie;
 import maurya.devansh.tmdb.data.model.Movie;
 import maurya.devansh.tmdb.data.model.MovieRemoteKey;
 import maurya.devansh.tmdb.data.model.MoviesList;
+import maurya.devansh.tmdb.data.model.NowPlayingMovie;
 import maurya.devansh.tmdb.data.model.TrendingMovie;
 import maurya.devansh.tmdb.data.remote.NetworkService;
 import maurya.devansh.tmdb.utils.common.MoviesListType;
@@ -85,7 +86,7 @@ public class MovieRepository {
     }
 
     private Single<MoviesList> getNowPlayingMoviesFromNetwork(int page) {
-        return networkService.getNowPlayingMovies(page, "IN");
+        return networkService.getNowPlayingMovies(page, "US");
     }
 
     public PagingSource<Integer, Movie> getBookmarkedMovies() {
@@ -106,28 +107,27 @@ public class MovieRepository {
         databaseService.movieDao().insertTrendingMovies(movies, trendingMovies);
     }
 
-    private void insertNowPlayingMovies(List<Movie> movies, List<TrendingMovie> trendingMovies) {
-        databaseService.movieDao().insertTrendingMovies(movies, trendingMovies);
+    private void insertNowPlayingMovies(List<Movie> movies, List<NowPlayingMovie> trendingMovies) {
+        databaseService.movieDao().insertNowPlayingMovies(movies, trendingMovies);
     }
 
     public void insertMovies(@MoviesListType int movieListType, MoviesList moviesList) {
         List<Movie> movies;
-        List<TrendingMovie> movieIds;
 
         switch (movieListType) {
             case MoviesList.TYPE_TRENDING:
                 movies = moviesList.results;
-                movieIds = movies.stream()
+                List<TrendingMovie> trendingMovies = movies.stream()
                     .map(movie -> new TrendingMovie(movie.id))
                     .collect(Collectors.toList());
-                insertTrendingMovies(movies, movieIds);
+                insertTrendingMovies(movies, trendingMovies);
                 break;
             case MoviesList.TYPE_NOW_PLAYING:
                 movies = moviesList.results;
-                movieIds = movies.stream()
-                    .map(movie -> new TrendingMovie(movie.id))
+                List<NowPlayingMovie> nowPlayingMovies = movies.stream()
+                    .map(movie -> new NowPlayingMovie(movie.id))
                     .collect(Collectors.toList());
-                insertNowPlayingMovies(movies, movieIds);
+                insertNowPlayingMovies(movies, nowPlayingMovies);
                 break;
         }
     }
