@@ -1,15 +1,14 @@
 package maurya.devansh.tmdb.ui.home;
 
 import androidx.lifecycle.LiveData;
-import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import maurya.devansh.tmdb.data.model.Movie;
 import maurya.devansh.tmdb.data.model.MoviesList;
-import maurya.devansh.tmdb.data.pagingdatasource.MoviePagingDataSource;
 import maurya.devansh.tmdb.data.repository.MovieRepository;
 import maurya.devansh.tmdb.di.qualifier.MoviesListTypeQualifier;
 import maurya.devansh.tmdb.ui.base.BaseViewModel;
@@ -19,6 +18,8 @@ import maurya.devansh.tmdb.ui.base.BaseViewModel;
  */
 
 public class HomeListViewModel extends BaseViewModel {
+
+    private final MovieRepository movieRepository;
 
     public final LiveData<PagedList<Movie>> movieListLiveData;
 
@@ -30,9 +31,19 @@ public class HomeListViewModel extends BaseViewModel {
             @MoviesListTypeQualifier(MoviesList.TYPE_TRENDING) int moviesListType
     ) {
         super(compositeDisposable);
+        this.movieRepository = movieRepository;
 
-        MoviePagingDataSource.Factory factory =
-                new MoviePagingDataSource.Factory(movieRepository, compositeDisposable, moviesListType);
-        movieListLiveData = new LivePagedListBuilder<>(factory, MoviePagingDataSource.PAGE_SIZE).build();
+//        MoviePagingDataSource.Factory factory =
+//                new MoviePagingDataSource.Factory(movieRepository, compositeDisposable, moviesListType);
+//        movieListLiveData = new LivePagedListBuilder<>(factory, MoviePagingDataSource.PAGE_SIZE).build();
+        movieListLiveData = movieRepository.getMoviesList(moviesListType, 1);
+    }
+
+    public void bookmarkMovie(Movie movie, boolean isBookmarked) {
+        compositeDisposable.add(movieRepository.bookmarkMovie(movie, isBookmarked)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe()
+        );
     }
 }

@@ -9,6 +9,8 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 
 import maurya.devansh.tmdb.data.model.Movie;
 import maurya.devansh.tmdb.databinding.ItemMovieBinding;
+import maurya.devansh.tmdb.ui.base.Action;
+import maurya.devansh.tmdb.ui.base.ActionPerformer;
 import maurya.devansh.tmdb.ui.base.BaseViewHolder;
 import maurya.devansh.tmdb.utils.common.ApiUtils;
 
@@ -18,8 +20,8 @@ import maurya.devansh.tmdb.utils.common.ApiUtils;
 
 public class MovieViewHolder extends BaseViewHolder<Movie, ItemMovieBinding> {
 
-    MovieViewHolder(View itemView) {
-        super(itemView);
+    MovieViewHolder(View itemView, ActionPerformer actionPerformer) {
+        super(itemView, actionPerformer);
     }
 
     @Override
@@ -35,5 +37,10 @@ public class MovieViewHolder extends BaseViewHolder<Movie, ItemMovieBinding> {
                 .into(binding.ivPoster);
         binding.tvTitle.setText(data.title);
         binding.tvDate.setText(data.releaseDate);
+
+        binding.buttonBookmark.setOnCheckedChangeListener(((buttonView, isChecked) ->
+                performAction(new Action.MovieBookmarked(data, isChecked))
+        ));
+        binding.buttonBookmark.setChecked(data.bookmarked());
     }
 }
