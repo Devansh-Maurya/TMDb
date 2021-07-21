@@ -41,7 +41,7 @@ import retrofit2.HttpException;
 
 public class MovieRepository {
 
-    private final NetworkService networkService;
+    public final NetworkService networkService;
     public final DatabaseService databaseService;
 
     public final MovieDao movieDao;
@@ -85,7 +85,11 @@ public class MovieRepository {
     }
 
     public LiveData<PagingData<Movie>> searchMovies(String query) {
-        return getMoviesList(MoviesList.TYPE_SEARCH_RESULT, query);
+        PagingConfig config = new PagingConfig(MoviesList.PAGE_SIZE, MoviesList.PAGE_SIZE, false);
+        PagingSource<Integer, Movie> pagingSource = new SearchMoviePagingSource(this, query);
+        return PagingLiveData.getLiveData(
+            new Pager<>(config, MoviesList.STARTING_PAGE, null, () -> pagingSource)
+        );
     }
 
     public PagingSource<Integer, Movie> getBookmarkedMovies() {
