@@ -1,15 +1,12 @@
 package maurya.devansh.tmdb.ui.bookmark;
 
 import androidx.lifecycle.LiveData;
-import androidx.paging.DataSource;
-import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
 import maurya.devansh.tmdb.data.model.Movie;
-import maurya.devansh.tmdb.data.pagingdatasource.MoviePagingDataSource;
 import maurya.devansh.tmdb.data.repository.MovieRepository;
 import maurya.devansh.tmdb.ui.base.BaseViewModel;
 
@@ -28,7 +25,8 @@ public class BookmarksViewModel extends BaseViewModel {
     ) {
         super(compositeDisposable);
 
-        DataSource.Factory<Integer, Movie> factory = movieRepository.getBookmarkedMovies();
-        movieListLiveData = new LivePagedListBuilder<>(factory, MoviePagingDataSource.PAGE_SIZE).build();
+//        DataSource.Factory<Integer, Movie> factory = movieRepository.getBookmarkedMovies();
+//        movieListLiveData = new LivePagedListBuilder<>(factory, MoviePagingDataSource.PAGE_SIZE).build();
+        movieListLiveData = null;
     }
 }
