@@ -6,7 +6,9 @@ import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 
+import maurya.devansh.tmdb.R;
 import maurya.devansh.tmdb.data.model.Movie;
 import maurya.devansh.tmdb.databinding.ItemMovieBinding;
 import maurya.devansh.tmdb.ui.base.Action;
@@ -32,14 +34,15 @@ public class MovieViewHolder extends BaseViewHolder<Movie, ItemMovieBinding> {
     @Override
     public void bind(@NonNull Movie data) {
         Glide.with(binding.ivPoster)
-                .load(ApiUtils.getTmdbImageUrl(data.posterPath))
-                .transition(DrawableTransitionOptions.withCrossFade(200))
-                .into(binding.ivPoster);
+            .load(ApiUtils.getTmdbImageUrl(data.posterPath))
+            .transition(DrawableTransitionOptions.withCrossFade(200))
+            .apply(new RequestOptions().placeholder(R.drawable.ic_movie_filled).error(R.drawable.ic_movie_filled))
+            .into(binding.ivPoster);
         binding.tvTitle.setText(data.title);
         binding.tvDate.setText(data.releaseDate);
 
         binding.buttonBookmark.setOnCheckedChangeListener(((buttonView, isChecked) ->
-                performAction(new Action.MovieBookmarked(data, isChecked))
+            performAction(new Action.MovieBookmarked(data, isChecked))
         ));
         binding.buttonBookmark.setChecked(data.bookmarked());
     }
