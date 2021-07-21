@@ -42,7 +42,6 @@ public class MovieRepository {
 
     private final NetworkService networkService;
     public final DatabaseService databaseService;
-    private final CompositeDisposable compositeDisposable;
 
     public final MovieDao movieDao;
     public final MovieRemoteKeyDao remoteKeyDao;
@@ -55,7 +54,6 @@ public class MovieRepository {
     ) {
         this.networkService = networkService;
         this.databaseService = databaseService;
-        this.compositeDisposable = compositeDisposable;
 
         movieDao = databaseService.movieDao();
         remoteKeyDao = databaseService.movieRemoteKeyDao();
@@ -104,11 +102,11 @@ public class MovieRepository {
         }
     }
 
-    public void insertTrendingMovies(List<Movie> movies, List<TrendingMovie> trendingMovies) {
+    private void insertTrendingMovies(List<Movie> movies, List<TrendingMovie> trendingMovies) {
         databaseService.movieDao().insertTrendingMovies(movies, trendingMovies);
     }
 
-    public void insertNowPlayingMovies(List<Movie> movies, List<TrendingMovie> trendingMovies) {
+    private void insertNowPlayingMovies(List<Movie> movies, List<TrendingMovie> trendingMovies) {
         databaseService.movieDao().insertTrendingMovies(movies, trendingMovies);
     }
 
