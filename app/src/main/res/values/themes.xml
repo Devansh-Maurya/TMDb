@@ -14,7 +14,6 @@
         <!-- Customize your theme here. -->
         <item name="android:colorBackground">@color/black_2c2c2c</item>
         <item name="bottomNavigationStyle">@style/BottomNavigationViewStyle</item>
-        <item name="android:textColorHint">@android:color/white</item>
         <item name="android:editTextColor">@android:color/white</item>
     </style>
 

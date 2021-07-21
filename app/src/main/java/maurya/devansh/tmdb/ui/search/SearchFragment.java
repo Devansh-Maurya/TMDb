@@ -44,6 +44,7 @@ public class SearchFragment extends DaggerBaseFragment<SearchViewModel, Fragment
         binding().toolbar.inflateMenu(R.menu.menu_search);
         binding().toolbar.setOnMenuItemClickListener(menuItem -> {
             final SearchView searchView = (SearchView) menuItem.getActionView();
+            searchView.setQueryHint(getString(R.string.search));
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
