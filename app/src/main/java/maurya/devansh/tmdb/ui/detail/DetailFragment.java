@@ -16,15 +16,10 @@ import maurya.devansh.tmdb.databinding.FragmentDetailBinding;
 import maurya.devansh.tmdb.ui.base.Action;
 import maurya.devansh.tmdb.ui.base.ActionPerformer;
 import maurya.devansh.tmdb.ui.base.DaggerBaseFragment;
-import maurya.devansh.tmdb.ui.home.movie.MovieAdapter;
 import maurya.devansh.tmdb.utils.common.ApiUtils;
 
 public class DetailFragment extends DaggerBaseFragment<DetailViewModel, FragmentDetailBinding>
     implements ActionPerformer {
-
-    private static final String TYPE = "type";
-
-    private final MovieAdapter movieAdapter = new MovieAdapter(this);
 
     @Override
     protected Pair<ViewModelStoreOwner, Class<DetailViewModel>> provideViewModelCreators() {
