@@ -36,7 +36,7 @@ public class MovieViewHolder extends BaseViewHolder<Movie, ItemMovieBinding> {
         Glide.with(binding.ivPoster)
             .load(ApiUtils.getTmdbImageUrl(data.posterPath))
             .transition(DrawableTransitionOptions.withCrossFade(200))
-            .apply(new RequestOptions().placeholder(R.drawable.ic_movie_filled).error(R.drawable.ic_movie_filled))
+            .apply(new RequestOptions().error(R.drawable.ic_movie_filled))
             .into(binding.ivPoster);
         binding.tvTitle.setText(data.title);
         binding.tvDate.setText(data.releaseDate);
