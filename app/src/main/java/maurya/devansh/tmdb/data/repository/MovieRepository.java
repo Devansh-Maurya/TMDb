@@ -20,7 +20,6 @@ import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import maurya.devansh.tmdb.data.local.db.DatabaseService;
@@ -51,8 +50,7 @@ public class MovieRepository {
     @Inject
     MovieRepository(
         NetworkService networkService,
-        DatabaseService databaseService,
-        CompositeDisposable compositeDisposable
+        DatabaseService databaseService
     ) {
         this.networkService = networkService;
         this.databaseService = databaseService;
@@ -61,33 +59,33 @@ public class MovieRepository {
         remoteKeyDao = databaseService.movieRemoteKeyDao();
     }
 
-    public Single<MoviesList> getMoviesListFromNetwork(@MoviesListType int type, int page) {
+    public Single<MoviesList> getMoviesListFromNetwork(@MoviesListType int type, int page, String query) {
         switch (type) {
             case MoviesList.TYPE_TRENDING:
-                return getTrendingMoviesFromNetwork(page);
+                return networkService.getTrendingMovies(page);
             case MoviesList.TYPE_NOW_PLAYING:
-                return getNowPlayingMoviesFromNetwork(page);
+                return networkService.getNowPlayingMovies(page, "IN");
             case MoviesList.TYPE_SEARCH_RESULT:
-                return getTrendingMoviesFromNetwork(page);
+                return networkService.searchMovies(query, page);
             default:
-                throw new IllegalArgumentException("Invalid Single movie list type: " + type);
+                throw new IllegalArgumentException("Invalid Single movie list type for network call: " + type);
         }
     }
 
-    public LiveData<PagingData<Movie>> getMoviesList(@MoviesListType int type) {
+    public LiveData<PagingData<Movie>> getMoviesList(@MoviesListType int type, String query) {
         PagingConfig config = new PagingConfig(MoviesList.PAGE_SIZE, MoviesList.PAGE_SIZE, false);
-        MoviesRemoteMediator remoteMediator = new MoviesRemoteMediator(this, type);
+        MoviesRemoteMediator remoteMediator = new MoviesRemoteMediator(this, type, query);
         return PagingLiveData.getLiveData(
             new Pager<>(config, MoviesList.STARTING_PAGE, remoteMediator, () -> movieDao.getMovies(type))
         );
     }
 
-    private Single<MoviesList> getTrendingMoviesFromNetwork(int page) {
-        return networkService.getTrendingMovies(page);
+    public LiveData<PagingData<Movie>> getMoviesList(@MoviesListType int type) {
+        return getMoviesList(type, "");
     }
 
-    private Single<MoviesList> getNowPlayingMoviesFromNetwork(int page) {
-        return networkService.getNowPlayingMovies(page, "IN");
+    public LiveData<PagingData<Movie>> searchMovies(String query) {
+        return getMoviesList(MoviesList.TYPE_SEARCH_RESULT, query);
     }
 
     public PagingSource<Integer, Movie> getBookmarkedMovies() {
@@ -104,35 +102,28 @@ public class MovieRepository {
         }
     }
 
-    private void insertTrendingMovies(List<Movie> movies, List<TrendingMovie> trendingMovies) {
-        databaseService.movieDao().insertTrendingMovies(movies, trendingMovies);
-    }
-
-    private void insertNowPlayingMovies(List<Movie> movies, List<NowPlayingMovie> trendingMovies) {
-        databaseService.movieDao().insertNowPlayingMovies(movies, trendingMovies);
-    }
-
     public void insertMovies(@MoviesListType int movieListType, MoviesList moviesList) {
-        List<Movie> movies;
+        List<Movie> movies = moviesList.results;
 
         switch (movieListType) {
             case MoviesList.TYPE_TRENDING:
-                movies = moviesList.results;
                 List<TrendingMovie> trendingMovies = IntStream
                     .range(0, movies.size())
                     .mapToObj(i -> new TrendingMovie(movies.get(i).id, moviesList.page, i))
                     .collect(Collectors.toList());
-                insertTrendingMovies(movies, trendingMovies);
+                movieDao.insertTrendingMovies(movies, trendingMovies);
                 break;
 
             case MoviesList.TYPE_NOW_PLAYING:
-                movies = moviesList.results;
-
                 List<NowPlayingMovie> nowPlayingMovies = IntStream
                     .range(0, movies.size())
                     .mapToObj(i -> new NowPlayingMovie(movies.get(i).id, moviesList.page, i))
                     .collect(Collectors.toList());
-                insertNowPlayingMovies(movies, nowPlayingMovies);
+                movieDao.insertNowPlayingMovies(movies, nowPlayingMovies);
+                break;
+
+            case MoviesList.TYPE_SEARCH_RESULT:
+                movieDao.insertMovieItems(movies);
                 break;
         }
     }
@@ -142,16 +133,19 @@ public class MovieRepository {
 
         private final MovieRepository movieRepository;
         @MoviesListType private final int movieListType;
+        private final String query;
 
         private final MovieRemoteKeyDao remoteKeyDao;
         private final MovieDao movieDao;
 
         public MoviesRemoteMediator(
             MovieRepository movieRepository,
-            @MoviesListType int movieListType
+            @MoviesListType int movieListType,
+            String query
         ) {
             this.movieRepository = movieRepository;
             this.movieListType = movieListType;
+            this.query = query;
 
             remoteKeyDao = movieRepository.remoteKeyDao;
             movieDao = movieRepository.movieDao;
@@ -184,7 +178,7 @@ public class MovieRepository {
                         return Single.just(new MediatorResult.Success(true));
                     }
 
-                    return movieRepository.getMoviesListFromNetwork(movieListType, remoteKey.nextKey)
+                    return movieRepository.getMoviesListFromNetwork(movieListType, remoteKey.nextKey, query)
                         .map(moviesList -> {
                             int newKey = moviesList.page != moviesList.totalPages
                                 ? (moviesList.page + 1) : MoviesList.INVALID_PAGE;
