@@ -8,6 +8,7 @@ import dagger.multibindings.IntoMap;
 import maurya.devansh.tmdb.di.ViewModelKey;
 import maurya.devansh.tmdb.ui.bookmark.BookmarksViewModel;
 import maurya.devansh.tmdb.ui.home.HomeListViewModel;
+import maurya.devansh.tmdb.ui.search.SearchViewModel;
 
 /**
  * Created by devansh on 18/07/21.
@@ -25,4 +26,9 @@ public abstract class FragmentModule {
     @IntoMap
     @ViewModelKey(BookmarksViewModel.class)
     public abstract ViewModel bindBookmarksViewModel(BookmarksViewModel bookmarksViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SearchViewModel.class)
+    public abstract ViewModel bindSearchViewModel(SearchViewModel searchViewModel);
 }

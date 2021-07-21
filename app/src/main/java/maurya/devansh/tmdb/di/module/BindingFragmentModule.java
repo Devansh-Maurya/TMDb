@@ -6,6 +6,7 @@ import maurya.devansh.tmdb.di.scope.PerFragment;
 import maurya.devansh.tmdb.ui.bookmark.BookmarksFragment;
 import maurya.devansh.tmdb.ui.home.HomeFragment;
 import maurya.devansh.tmdb.ui.home.HomeListFragment;
+import maurya.devansh.tmdb.ui.search.SearchFragment;
 
 /**
  * Created by devansh on 18/07/21.
@@ -25,4 +26,8 @@ public abstract class BindingFragmentModule {
     @ContributesAndroidInjector(modules = {FragmentModule.class})
     @PerFragment
     public abstract BookmarksFragment contributeBookmarksFragment();
+
+    @ContributesAndroidInjector(modules = {FragmentModule.class})
+    @PerFragment
+    public abstract SearchFragment contributeSearchFragment();
 }
