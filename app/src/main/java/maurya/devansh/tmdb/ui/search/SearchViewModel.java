@@ -2,7 +2,9 @@ package maurya.devansh.tmdb.ui.search;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.ViewModelKt;
 import androidx.paging.PagingData;
+import androidx.paging.PagingLiveData;
 
 import java.util.concurrent.TimeUnit;
 
@@ -39,7 +41,6 @@ public class SearchViewModel extends BaseViewModel {
     ) {
         super(compositeDisposable);
         this.movieRepository = movieRepository;
-
         setupSearchObserver();
     }
 
@@ -51,6 +52,8 @@ public class SearchViewModel extends BaseViewModel {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(query -> {
                 LiveData<PagingData<Movie>> pagingDataLiveData = movieRepository.searchMovies(query);
+                // TODO: 21/07/21 Check if this works. If yes, how? Issue with rotating device
+                PagingLiveData.cachedIn(pagingDataLiveData, ViewModelKt.getViewModelScope(this));
                 searchResultsLiveData.addSource(pagingDataLiveData, searchResultsLiveData::setValue);
             }, throwable -> {})
         );
