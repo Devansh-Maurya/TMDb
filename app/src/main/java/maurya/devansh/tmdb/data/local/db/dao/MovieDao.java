@@ -60,11 +60,11 @@ public abstract class MovieDao {
     public abstract PagingSource<Integer, Movie> getBookmarkedMovies();
 
     @Transaction
-    @Query("SELECT * FROM movie WHERE id IN (SELECT trending_movie.id FROM trending_movie) ORDER BY timestamp")
+    @Query("SELECT movie.* FROM movie, trending_movie AS tm WHERE movie.id == tm.id ORDER BY tm.page, tm.list_position")
     public abstract PagingSource<Integer, Movie> getTrendingMovies();
 
     @Transaction
-    @Query("SELECT * FROM movie WHERE id IN (SELECT now_playing_movie.id FROM now_playing_movie) ORDER by timestamp")
+    @Query("SELECT movie.* FROM movie, now_playing_movie AS np WHERE movie.id == np.id ORDER BY np.page, np.list_position")
     public abstract PagingSource<Integer, Movie> getNowPlayingMovies();
 
     public PagingSource<Integer, Movie> getMovies(@MoviesListType int type) {

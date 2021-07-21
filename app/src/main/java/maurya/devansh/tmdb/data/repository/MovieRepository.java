@@ -14,6 +14,7 @@ import androidx.paging.rxjava2.RxRemoteMediator;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 
@@ -117,15 +118,19 @@ public class MovieRepository {
         switch (movieListType) {
             case MoviesList.TYPE_TRENDING:
                 movies = moviesList.results;
-                List<TrendingMovie> trendingMovies = movies.stream()
-                    .map(movie -> new TrendingMovie(movie.id))
+                List<TrendingMovie> trendingMovies = IntStream
+                    .range(0, movies.size())
+                    .mapToObj(i -> new TrendingMovie(movies.get(i).id, moviesList.page, i))
                     .collect(Collectors.toList());
                 insertTrendingMovies(movies, trendingMovies);
                 break;
+
             case MoviesList.TYPE_NOW_PLAYING:
                 movies = moviesList.results;
-                List<NowPlayingMovie> nowPlayingMovies = movies.stream()
-                    .map(movie -> new NowPlayingMovie(movie.id))
+
+                List<NowPlayingMovie> nowPlayingMovies = IntStream
+                    .range(0, movies.size())
+                    .mapToObj(i -> new NowPlayingMovie(movies.get(i).id, moviesList.page, i))
                     .collect(Collectors.toList());
                 insertNowPlayingMovies(movies, nowPlayingMovies);
                 break;

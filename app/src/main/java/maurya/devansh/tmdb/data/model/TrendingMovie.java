@@ -9,7 +9,7 @@ import androidx.room.Entity;
 @Entity(tableName = "trending_movie")
 public class TrendingMovie extends MovieId {
 
-    public TrendingMovie(int id) {
-        super(id);
+    public TrendingMovie(int id, int page, int listPosition) {
+        super(id, page, listPosition);
     }
 }
