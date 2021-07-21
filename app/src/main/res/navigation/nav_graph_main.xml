@@ -22,4 +22,18 @@
         android:name="maurya.devansh.tmdb.ui.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="maurya.devansh.tmdb.ui.detail.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="imageUrl"
+            app:argType="string" />
+    </fragment>
+
+
+    <action
+        android:id="@+id/actionOpenDetailScreen"
+        app:destination="@id/detailFragment" />
 </navigation>

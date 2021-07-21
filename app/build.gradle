@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
 }
+apply plugin: "androidx.navigation.safeargs"
 
 def localProperties = new Properties()
 localProperties.load(new FileInputStream(rootProject.file("local.properties")))
@@ -127,4 +128,7 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:$room_version"
     // RxJava2 support for Room
     implementation "androidx.room:room-rxjava2:$room_version"
+
+    // ShapeOfView
+    implementation 'io.github.florent37:shapeofview:1.4.7'
 }
