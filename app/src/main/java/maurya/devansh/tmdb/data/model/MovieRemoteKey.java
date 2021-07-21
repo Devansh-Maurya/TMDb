@@ -15,15 +15,15 @@ import maurya.devansh.tmdb.utils.common.MoviesListType;
 @Entity(tableName = "movie_remote_keys")
 public class MovieRemoteKey {
 
-    @ColumnInfo(name = "next_key")
-    public final int nextKey;
-
     @PrimaryKey
     @ColumnInfo(name = "movie_list_type")
     @MoviesListType public final int movieListType;
 
-    public MovieRemoteKey(int nextKey, int movieListType) {
-        this.nextKey = nextKey;
+    @ColumnInfo(name = "next_key")
+    public final int nextKey;
+
+    public MovieRemoteKey(int movieListType, int nextKey) {
         this.movieListType = movieListType;
+        this.nextKey = nextKey;
     }
 }

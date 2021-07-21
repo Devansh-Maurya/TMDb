@@ -12,7 +12,6 @@ import java.util.List;
 
 @Keep
 public class MoviesList {
-    @SerializedName("results") private List<Movie> results = null;
 
     public static final int TYPE_UNDEFINED = 0;
     public static final int TYPE_TRENDING = 1;
@@ -20,7 +19,11 @@ public class MoviesList {
     public static final int TYPE_SEARCH_RESULT = 3;
     public static final int TYPE_BOOKMARKED = 4;
 
-    public List<Movie> getResults() {
-        return results;
+    @SerializedName("results") public final List<Movie> results;
+    @SerializedName("page") public final int page;
+
+    public MoviesList() {
+        this.results = null;
+        this.page = -1;
     }
 }

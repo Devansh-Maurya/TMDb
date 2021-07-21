@@ -10,6 +10,7 @@ import androidx.paging.rxjava2.RxRemoteMediator;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
@@ -19,16 +20,20 @@ import javax.inject.Inject;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import maurya.devansh.tmdb.data.local.db.DatabaseService;
 import maurya.devansh.tmdb.data.local.db.dao.MovieDao;
+import maurya.devansh.tmdb.data.local.db.dao.MovieRemoteKeyDao;
 import maurya.devansh.tmdb.data.model.BookmarkedMovie;
 import maurya.devansh.tmdb.data.model.Movie;
+import maurya.devansh.tmdb.data.model.MovieRemoteKey;
 import maurya.devansh.tmdb.data.model.MoviesList;
 import maurya.devansh.tmdb.data.model.TrendingMovie;
 import maurya.devansh.tmdb.data.remote.NetworkService;
 import maurya.devansh.tmdb.utils.common.MoviesListType;
 import maurya.devansh.tmdb.utils.network.PagingRequestHelper;
+import retrofit2.HttpException;
 
 /**
  * Created by devansh on 18/07/21.
@@ -37,10 +42,11 @@ import maurya.devansh.tmdb.utils.network.PagingRequestHelper;
 public class MovieRepository {
 
     private final NetworkService networkService;
-    private final DatabaseService databaseService;
+    public final DatabaseService databaseService;
     private final CompositeDisposable compositeDisposable;
 
-    private final MovieDao movieDao;
+    public final MovieDao movieDao;
+    public final MovieRemoteKeyDao remoteKeyDao;
 
     @Inject
     MovieRepository(
@@ -53,6 +59,7 @@ public class MovieRepository {
         this.compositeDisposable = compositeDisposable;
 
         movieDao = databaseService.movieDao();
+        remoteKeyDao = databaseService.movieRemoteKeyDao();
     }
 
     public Single<MoviesList> getMoviesListFromNetwork(@MoviesListType int type, int page) {
@@ -72,7 +79,8 @@ public class MovieRepository {
         compositeDisposable.add(getMoviesListFromNetwork(type, page)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
-            .subscribe(moviesList -> movieDao.deleteMovies(type), throwable -> {})
+            .subscribe(moviesList -> movieDao.deleteMovies(type), throwable -> {
+            })
         );
         PagedList.Config config = new PagedList.Config.Builder()
             .setEnablePlaceholders(false)
@@ -119,6 +127,31 @@ public class MovieRepository {
         databaseService.movieDao().insertTrendingMovies(movies, trendingMovies);
     }
 
+    public Completable deleteMovies(@MoviesListType int movieListType) {
+        return movieDao.deleteMovies(movieListType);
+    }
+
+    public void insertMovies(@MoviesListType int movieListType, MoviesList moviesList) {
+        List<Movie> movies;
+        List<TrendingMovie> movieIds;
+
+        switch (movieListType) {
+            case MoviesList.TYPE_TRENDING:
+                movies = moviesList.results;
+                movieIds = movies.stream()
+                    .map(movie -> new TrendingMovie(movie.id))
+                    .collect(Collectors.toList());
+                insertTrendingMovies(movies, movieIds);
+                break;
+            case MoviesList.TYPE_NOW_PLAYING:
+                movies = moviesList.results;
+                movieIds = movies.stream()
+                    .map(movie -> new TrendingMovie(movie.id))
+                    .collect(Collectors.toList());
+                insertNowPlayingMovies(movies, movieIds);
+                break;
+        }
+    }
 
 
     private class MoviesListBoundaryCallback extends PagedList.BoundaryCallback<Movie> {
@@ -157,26 +190,26 @@ public class MovieRepository {
                         .subscribeOn(Schedulers.io())
                         .observeOn(Schedulers.io())
                         .subscribe(moviesList -> {
-                            storeMoviesInDb(moviesList);
+                            insertMovies(moviesList);
                             callback.recordSuccess();
                         }, callback::recordFailure)
                 ));
         }
 
-        private void storeMoviesInDb(MoviesList moviesList) {
+        public void insertMovies(MoviesList moviesList) {
             List<Movie> movies;
             List<TrendingMovie> movieIds;
 
             switch (movieListType) {
                 case MoviesList.TYPE_TRENDING:
-                    movies = moviesList.getResults();
+                    movies = moviesList.results;
                     movieIds = movies.stream()
                         .map(movie -> new TrendingMovie(movie.id))
                         .collect(Collectors.toList());
                     movieRepository.insertTrendingMovies(movies, movieIds);
                     break;
                 case MoviesList.TYPE_NOW_PLAYING:
-                    movies = moviesList.getResults();
+                    movies = moviesList.results;
                     movieIds = movies.stream()
                         .map(movie -> new TrendingMovie(movie.id))
                         .collect(Collectors.toList());
@@ -194,8 +227,7 @@ public class MovieRepository {
         @MoviesListType private final int movieListType;
         private final CompositeDisposable compositeDisposable;
 
-        private final PagingRequestHelper helper = new PagingRequestHelper(Executors.newSingleThreadExecutor());
-        private int pageNumber = 1;
+        private final MovieRemoteKeyDao remoteKeyDao;
 
         public MoviesRemoteMediator(
             MovieRepository movieRepository,
@@ -205,6 +237,8 @@ public class MovieRepository {
             this.movieRepository = movieRepository;
             this.movieListType = movieListType;
             this.compositeDisposable = compositeDisposable;
+
+            remoteKeyDao = movieRepository.remoteKeyDao;
         }
 
         @NonNull
@@ -213,28 +247,51 @@ public class MovieRepository {
             @NonNull LoadType loadType,
             @NonNull PagingState<Integer, Movie> pagingState
         ) {
+            Single<MovieRemoteKey> remoteKeySingle = null;
             switch (loadType) {
                 case REFRESH:
+                    remoteKeySingle = Single.just(new MovieRemoteKey(movieListType, 1));
                     break;
                 case PREPEND:
                     // Never need to prepend, Immediately return, reporting end of pagination.
                     // pagination.
                     return Single.just(new MediatorResult.Success(true));
                 case APPEND:
-//                    User lastItem = state.lastItemOrNull();
-//
-//                    // You must explicitly check if the last item is null when appending,
-//                    // since passing null to networkService is only valid for initial load.
-//                    // If lastItem is null it means no items were loaded after the initial
-//                    // REFRESH and there are no more items to load.
-//                    if (lastItem == null) {
-//                        return Single.just(new MediatorResult.Success(true));
-//                    }
-//
-//                    loadKey = lastItem.getId();
+                    // Query remoteKeyDao for the next RemoteKey.
+                    remoteKeySingle = movieRepository.remoteKeyDao.getRemoteKey(movieListType);
                     break;
             }
-            return null;
+
+            return remoteKeySingle.subscribeOn(Schedulers.io())
+                .flatMap((Function<MovieRemoteKey, Single<MediatorResult>>) remoteKey -> {
+                    if (loadType != LoadType.REFRESH && remoteKey.nextKey == -1) {
+                        return Single.just(new MediatorResult.Success(true));
+                    }
+
+                    return movieRepository.getMoviesListFromNetwork(movieListType, remoteKey.nextKey)
+                        .map(moviesList -> {
+                            int newKey = moviesList.results != null ? moviesList.page : -1;
+
+
+                            movieRepository.databaseService.runInTransaction(() -> {
+                                if (loadType == LoadType.REFRESH) {
+                                    movieRepository.deleteMovies(movieListType);
+                                    remoteKeyDao.deleteKey(movieListType);
+                                }
+
+                                remoteKeyDao.insertKey(new MovieRemoteKey(movieListType, newKey));
+                                movieRepository.insertMovies(movieListType, moviesList);
+                            });
+
+                            return new MediatorResult.Success(newKey == -1);
+                        });
+                })
+                .onErrorResumeNext(e -> {
+                    if (e instanceof IOException || e instanceof HttpException) {
+                        return Single.just(new MediatorResult.Error(e));
+                    }
+                    return Single.error(e);
+                });
         }
     }
 }
