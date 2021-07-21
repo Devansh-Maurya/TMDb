@@ -28,10 +28,6 @@ public class Movie {
     @ColumnInfo(name = "poster_path")
     public final String posterPath;
 
-    @SerializedName("overview")
-    @ColumnInfo(name = "overview")
-    public final String overview;
-
     @SerializedName("release_date")
     @ColumnInfo(name = "release_date")
     public final String releaseDate;
@@ -44,9 +40,8 @@ public class Movie {
     @ColumnInfo(name = "original_language")
     public final String originalLanguage;
 
-    @SerializedName("backdrop_path")
-    @ColumnInfo(name = "backdrop_path")
-    public final String backdropPath;
+    @ColumnInfo(name = "timestamp")
+    public final long timeStamp;
 
     @Ignore
     public int isBookmarked;
@@ -58,39 +53,31 @@ public class Movie {
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull Movie oldItem, @NonNull Movie newItem) {
+        public boolean areContentsTheSame(Movie oldItem, Movie newItem) {
+            if (oldItem == null) return false;
             return oldItem.equals(newItem);
         }
     };
 
     public Movie(int id,
                  String posterPath,
-                 String overview,
                  String releaseDate,
                  String title,
                  String originalLanguage,
-                 String backdropPath
+                 long timeStamp
     ) {
         this.id = id;
         this.posterPath = posterPath;
-        this.overview = overview;
         this.releaseDate = releaseDate;
         this.title = title;
         this.originalLanguage = originalLanguage;
-        this.backdropPath = backdropPath;
+        this.timeStamp = timeStamp;
     }
 
     @Ignore
-    public Movie(int id,
-                 String posterPath,
-                 String overview,
-                 String releaseDate,
-                 String title,
-                 String originalLanguage,
-                 String backdropPath,
-                 int isBookmarked) {
-        this(id, posterPath, overview, releaseDate, title, originalLanguage, backdropPath);
-        this.isBookmarked = isBookmarked;
+    public Movie() {
+        this(-1, "", "", "", "", System.currentTimeMillis());
+        isBookmarked = 0;
     }
 
     public void setBookmarked(boolean bookmarked) {
@@ -108,15 +95,13 @@ public class Movie {
         Movie movie = (Movie) o;
         return id == movie.id &&
                 posterPath.equals(movie.posterPath) &&
-                overview.equals(movie.overview) &&
                 releaseDate.equals(movie.releaseDate) &&
                 title.equals(movie.title) &&
-                originalLanguage.equals(movie.originalLanguage) &&
-                backdropPath.equals(movie.backdropPath);
+                originalLanguage.equals(movie.originalLanguage);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(posterPath, overview, releaseDate, id, title, originalLanguage, backdropPath);
+        return Objects.hash(posterPath, releaseDate, id, title, originalLanguage);
     }
 }
