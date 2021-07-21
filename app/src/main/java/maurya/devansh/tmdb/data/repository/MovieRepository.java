@@ -180,14 +180,14 @@ public class MovieRepository {
 
             return remoteKeySingle.subscribeOn(Schedulers.io())
                 .flatMap((Function<MovieRemoteKey, Single<MediatorResult>>) remoteKey -> {
-                    if (loadType != LoadType.REFRESH && remoteKey.nextKey == MoviesList.INAVLID_PAGE) {
+                    if (loadType != LoadType.REFRESH && remoteKey.nextKey == MoviesList.INVALID_PAGE) {
                         return Single.just(new MediatorResult.Success(true));
                     }
 
                     return movieRepository.getMoviesListFromNetwork(movieListType, remoteKey.nextKey)
                         .map(moviesList -> {
-                            int newKey = moviesList.results != null
-                                ? (moviesList.page + 1) : MoviesList.INAVLID_PAGE;
+                            int newKey = moviesList.page != moviesList.totalPages
+                                ? (moviesList.page + 1) : MoviesList.INVALID_PAGE;
 
                             movieRepository.databaseService.runInTransaction(() -> {
                                 if (loadType == LoadType.REFRESH) {
@@ -199,7 +199,7 @@ public class MovieRepository {
                                 movieRepository.insertMovies(movieListType, moviesList);
                             });
 
-                            return new MediatorResult.Success(newKey == MoviesList.INAVLID_PAGE);
+                            return new MediatorResult.Success(newKey == MoviesList.INVALID_PAGE);
                         });
                 })
                 .onErrorResumeNext(e -> {
