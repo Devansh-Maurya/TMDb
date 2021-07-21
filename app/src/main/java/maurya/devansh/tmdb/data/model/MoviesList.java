@@ -19,6 +19,10 @@ public class MoviesList {
     public static final int TYPE_SEARCH_RESULT = 3;
     public static final int TYPE_BOOKMARKED = 4;
 
+    public static final int PAGE_SIZE = 20;
+    public static final int STARTING_PAGE = 1;
+    public static final int INAVLID_PAGE = -1;
+
     @SerializedName("results") public final List<Movie> results;
     @SerializedName("page") public final int page;
 

@@ -41,10 +41,13 @@ public abstract class MovieDao {
         switch (type) {
             case MoviesList.TYPE_TRENDING:
                 deleteAllTrendingMovies();
+                break;
             case MoviesList.TYPE_NOW_PLAYING:
                 deleteAllNowPlayingMovies();
+                break;
             case MoviesList.TYPE_BOOKMARKED:
 //                return getBookmarkedMovies();
+                break;
             case MoviesList.TYPE_SEARCH_RESULT:
             default:
                 throw new IllegalArgumentException("Invalid movie list type for DB query: " + type);
@@ -53,11 +56,11 @@ public abstract class MovieDao {
 
     // TODO: 18/07/21 Add order query
     @Transaction
-    @Query("SELECT * FROM movie WHERE id IN (SELECT bookmarked_movie.id FROM bookmarked_movie) ORDER BY timestamp")
+    @Query("SELECT * FROM movie WHERE id IN (SELECT bookmarked_movie.id FROM bookmarked_movie)")
     public abstract PagingSource<Integer, Movie> getBookmarkedMovies();
 
     @Transaction
-    @Query("SELECT * FROM movie WHERE id IN (SELECT trending_movie.id FROM trending_movie)")
+    @Query("SELECT * FROM movie WHERE id IN (SELECT trending_movie.id FROM trending_movie) ORDER BY timestamp")
     public abstract PagingSource<Integer, Movie> getTrendingMovies();
 
     @Transaction

@@ -4,7 +4,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.paging.PagedListAdapter;
+import androidx.paging.PagingDataAdapter;
 
 import maurya.devansh.tmdb.R;
 import maurya.devansh.tmdb.data.model.Movie;
@@ -14,7 +14,7 @@ import maurya.devansh.tmdb.ui.base.ActionPerformer;
  * Created by devansh on 18/07/21.
  */
 
-public class MovieAdapter extends PagedListAdapter<Movie, MovieViewHolder> {
+public class MovieAdapter extends PagingDataAdapter<Movie, MovieViewHolder> {
 
     private final ActionPerformer actionPerformer;
 

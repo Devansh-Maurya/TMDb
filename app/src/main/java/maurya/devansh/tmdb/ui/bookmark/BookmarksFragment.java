@@ -43,7 +43,7 @@ public class BookmarksFragment extends DaggerBaseFragment<BookmarksViewModel, Fr
     protected void setupObservers() {
         viewModel.movieListLiveData.observe(getViewLifecycleOwner(), movies -> {
             binding().progressBar.setVisibility(View.GONE);
-            movieAdapter.submitList(movies);
+//            movieAdapter.submitList(movies);
         });
     }
 
