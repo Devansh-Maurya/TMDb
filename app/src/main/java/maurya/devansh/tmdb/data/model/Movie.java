@@ -94,10 +94,10 @@ public class Movie {
         if (o == null || getClass() != o.getClass()) return false;
         Movie movie = (Movie) o;
         return id == movie.id &&
-                posterPath.equals(movie.posterPath) &&
-                releaseDate.equals(movie.releaseDate) &&
-                title.equals(movie.title) &&
-                originalLanguage.equals(movie.originalLanguage);
+                posterPath != null && posterPath.equals(movie.posterPath) &&
+                releaseDate != null && releaseDate.equals(movie.releaseDate) &&
+                title != null && title.equals(movie.title) &&
+                originalLanguage != null && originalLanguage.equals(movie.originalLanguage);
     }
 
     @Override

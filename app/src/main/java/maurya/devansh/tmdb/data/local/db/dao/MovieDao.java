@@ -1,6 +1,6 @@
 package maurya.devansh.tmdb.data.local.db.dao;
 
-import androidx.paging.DataSource;
+import androidx.paging.PagingSource;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -32,19 +32,22 @@ public abstract class MovieDao {
     public abstract Completable deleteBookmarkedMovie(BookmarkedMovie movieId);
 
     @Query("DELETE FROM trending_movie")
-    protected abstract Completable deleteAllTrendingMovies();
+    protected abstract void deleteAllTrendingMovies();
 
     @Query("DELETE FROM now_playing_movie")
-    protected abstract Completable deleteAllNowPlayingMovies();
+    protected abstract void deleteAllNowPlayingMovies();
 
-    public Completable deleteMovies(@MoviesListType int type) {
+    public void deleteMovies(@MoviesListType int type) {
         switch (type) {
             case MoviesList.TYPE_TRENDING:
-                return deleteAllTrendingMovies();
+                deleteAllTrendingMovies();
+                break;
             case MoviesList.TYPE_NOW_PLAYING:
-                return deleteAllNowPlayingMovies();
+                deleteAllNowPlayingMovies();
+                break;
             case MoviesList.TYPE_BOOKMARKED:
 //                return getBookmarkedMovies();
+                break;
             case MoviesList.TYPE_SEARCH_RESULT:
             default:
                 throw new IllegalArgumentException("Invalid movie list type for DB query: " + type);
@@ -53,18 +56,18 @@ public abstract class MovieDao {
 
     // TODO: 18/07/21 Add order query
     @Transaction
-    @Query("SELECT * FROM movie WHERE id IN (SELECT bookmarked_movie.id FROM bookmarked_movie) ORDER BY timestamp")
-    public abstract DataSource.Factory<Integer, Movie> getBookmarkedMovies();
+    @Query("SELECT * FROM movie WHERE id IN (SELECT bookmarked_movie.id FROM bookmarked_movie)")
+    public abstract PagingSource<Integer, Movie> getBookmarkedMovies();
+
+    @Transaction
+    @Query("SELECT * FROM movie WHERE id IN (SELECT trending_movie.id FROM trending_movie) ORDER BY timestamp")
+    public abstract PagingSource<Integer, Movie> getTrendingMovies();
 
     @Transaction
     @Query("SELECT * FROM movie WHERE id IN (SELECT trending_movie.id FROM trending_movie)")
-    public abstract DataSource.Factory<Integer, Movie> getTrendingMovies();
+    public abstract PagingSource<Integer, Movie> getNowPlayingMovies();
 
-    @Transaction
-    @Query("SELECT * FROM movie WHERE id IN (SELECT trending_movie.id FROM trending_movie)")
-    public abstract DataSource.Factory<Integer, Movie> getNowPlayingMovies();
-
-    public DataSource.Factory<Integer, Movie> getMovies(@MoviesListType int type) {
+    public PagingSource<Integer, Movie> getMovies(@MoviesListType int type) {
         switch (type) {
             case MoviesList.TYPE_TRENDING:
                 return getTrendingMovies();

@@ -55,7 +55,7 @@ public class HomeListFragment extends DaggerBaseFragment<HomeListViewModel, Frag
     protected void setupObservers() {
         viewModel.movieListLiveData.observe(getViewLifecycleOwner(), movies -> {
             binding().progressBar.setVisibility(View.GONE);
-            movieAdapter.submitList(movies);
+            movieAdapter.submitData(getViewLifecycleOwner().getLifecycle(), movies);
         });
     }
 

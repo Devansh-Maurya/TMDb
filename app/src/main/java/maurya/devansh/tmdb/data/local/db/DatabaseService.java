@@ -6,8 +6,10 @@ import androidx.room.RoomDatabase;
 import javax.inject.Singleton;
 
 import maurya.devansh.tmdb.data.local.db.dao.MovieDao;
+import maurya.devansh.tmdb.data.local.db.dao.MovieRemoteKeyDao;
 import maurya.devansh.tmdb.data.model.BookmarkedMovie;
 import maurya.devansh.tmdb.data.model.Movie;
+import maurya.devansh.tmdb.data.model.MovieRemoteKey;
 import maurya.devansh.tmdb.data.model.NowPlayingMovie;
 import maurya.devansh.tmdb.data.model.TrendingMovie;
 
@@ -16,11 +18,13 @@ import maurya.devansh.tmdb.data.model.TrendingMovie;
  */
 
 @Singleton
-@Database(entities = {Movie.class, BookmarkedMovie.class, TrendingMovie.class, NowPlayingMovie.class},
+@Database(entities = {Movie.class, BookmarkedMovie.class, TrendingMovie.class, NowPlayingMovie.class, MovieRemoteKey.class},
         version = 1,
         exportSchema = false
 )
 public abstract class DatabaseService extends RoomDatabase {
 
     public abstract MovieDao movieDao();
+
+    public abstract MovieRemoteKeyDao movieRemoteKeyDao();
 }
