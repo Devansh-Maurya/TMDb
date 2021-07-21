@@ -87,7 +87,7 @@ public class MovieRepository {
     }
 
     private Single<MoviesList> getNowPlayingMoviesFromNetwork(int page) {
-        return networkService.getNowPlayingMovies(page, "US");
+        return networkService.getNowPlayingMovies(page, "IN");
     }
 
     public PagingSource<Integer, Movie> getBookmarkedMovies() {
