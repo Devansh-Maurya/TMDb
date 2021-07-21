@@ -17,8 +17,20 @@ public class MovieId {
     @ColumnInfo(name = "id")
     public final int id;
 
-    public MovieId(int id) {
+    @ColumnInfo(name = "page")
+    public final int page;
+
+    @ColumnInfo(name = "list_position")
+    public final int listPosition;
+
+    public MovieId(int id, int page, int listPosition) {
         this.id = id;
+        this.page = page;
+        this.listPosition = listPosition;
+    }
+
+    public MovieId(int id) {
+        this(id, -1, -1);
     }
 
     @Override
@@ -26,11 +38,13 @@ public class MovieId {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MovieId movieId = (MovieId) o;
-        return id == movieId.id;
+        return id == movieId.id &&
+            page == movieId.page &&
+            listPosition == movieId.listPosition;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, page, listPosition);
     }
 }

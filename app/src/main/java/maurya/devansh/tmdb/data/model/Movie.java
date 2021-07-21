@@ -40,9 +40,6 @@ public class Movie {
     @ColumnInfo(name = "original_language")
     public final String originalLanguage;
 
-    @ColumnInfo(name = "timestamp")
-    public final long timeStamp;
-
     @Ignore
     public int isBookmarked;
 
@@ -53,8 +50,7 @@ public class Movie {
         }
 
         @Override
-        public boolean areContentsTheSame(Movie oldItem, Movie newItem) {
-            if (oldItem == null) return false;
+        public boolean areContentsTheSame(@NonNull Movie oldItem, @NonNull Movie newItem) {
             return oldItem.equals(newItem);
         }
     };
@@ -63,20 +59,18 @@ public class Movie {
                  String posterPath,
                  String releaseDate,
                  String title,
-                 String originalLanguage,
-                 long timeStamp
+                 String originalLanguage
     ) {
         this.id = id;
         this.posterPath = posterPath;
         this.releaseDate = releaseDate;
         this.title = title;
         this.originalLanguage = originalLanguage;
-        this.timeStamp = timeStamp;
     }
 
     @Ignore
     public Movie() {
-        this(-1, "", "", "", "", System.currentTimeMillis());
+        this(-1, "", "", "", "");
         isBookmarked = 0;
     }
 

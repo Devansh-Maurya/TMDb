@@ -14,6 +14,7 @@ import androidx.paging.rxjava2.RxRemoteMediator;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 
@@ -29,6 +30,7 @@ import maurya.devansh.tmdb.data.model.BookmarkedMovie;
 import maurya.devansh.tmdb.data.model.Movie;
 import maurya.devansh.tmdb.data.model.MovieRemoteKey;
 import maurya.devansh.tmdb.data.model.MoviesList;
+import maurya.devansh.tmdb.data.model.NowPlayingMovie;
 import maurya.devansh.tmdb.data.model.TrendingMovie;
 import maurya.devansh.tmdb.data.remote.NetworkService;
 import maurya.devansh.tmdb.utils.common.MoviesListType;
@@ -106,28 +108,31 @@ public class MovieRepository {
         databaseService.movieDao().insertTrendingMovies(movies, trendingMovies);
     }
 
-    private void insertNowPlayingMovies(List<Movie> movies, List<TrendingMovie> trendingMovies) {
-        databaseService.movieDao().insertTrendingMovies(movies, trendingMovies);
+    private void insertNowPlayingMovies(List<Movie> movies, List<NowPlayingMovie> trendingMovies) {
+        databaseService.movieDao().insertNowPlayingMovies(movies, trendingMovies);
     }
 
     public void insertMovies(@MoviesListType int movieListType, MoviesList moviesList) {
         List<Movie> movies;
-        List<TrendingMovie> movieIds;
 
         switch (movieListType) {
             case MoviesList.TYPE_TRENDING:
                 movies = moviesList.results;
-                movieIds = movies.stream()
-                    .map(movie -> new TrendingMovie(movie.id))
+                List<TrendingMovie> trendingMovies = IntStream
+                    .range(0, movies.size())
+                    .mapToObj(i -> new TrendingMovie(movies.get(i).id, moviesList.page, i))
                     .collect(Collectors.toList());
-                insertTrendingMovies(movies, movieIds);
+                insertTrendingMovies(movies, trendingMovies);
                 break;
+
             case MoviesList.TYPE_NOW_PLAYING:
                 movies = moviesList.results;
-                movieIds = movies.stream()
-                    .map(movie -> new TrendingMovie(movie.id))
+
+                List<NowPlayingMovie> nowPlayingMovies = IntStream
+                    .range(0, movies.size())
+                    .mapToObj(i -> new NowPlayingMovie(movies.get(i).id, moviesList.page, i))
                     .collect(Collectors.toList());
-                insertNowPlayingMovies(movies, movieIds);
+                insertNowPlayingMovies(movies, nowPlayingMovies);
                 break;
         }
     }
@@ -175,14 +180,14 @@ public class MovieRepository {
 
             return remoteKeySingle.subscribeOn(Schedulers.io())
                 .flatMap((Function<MovieRemoteKey, Single<MediatorResult>>) remoteKey -> {
-                    if (loadType != LoadType.REFRESH && remoteKey.nextKey == MoviesList.INAVLID_PAGE) {
+                    if (loadType != LoadType.REFRESH && remoteKey.nextKey == MoviesList.INVALID_PAGE) {
                         return Single.just(new MediatorResult.Success(true));
                     }
 
                     return movieRepository.getMoviesListFromNetwork(movieListType, remoteKey.nextKey)
                         .map(moviesList -> {
-                            int newKey = moviesList.results != null
-                                ? (moviesList.page + 1) : MoviesList.INAVLID_PAGE;
+                            int newKey = moviesList.page != moviesList.totalPages
+                                ? (moviesList.page + 1) : MoviesList.INVALID_PAGE;
 
                             movieRepository.databaseService.runInTransaction(() -> {
                                 if (loadType == LoadType.REFRESH) {
@@ -194,7 +199,7 @@ public class MovieRepository {
                                 movieRepository.insertMovies(movieListType, moviesList);
                             });
 
-                            return new MediatorResult.Success(newKey == MoviesList.INAVLID_PAGE);
+                            return new MediatorResult.Success(newKey == MoviesList.INVALID_PAGE);
                         });
                 })
                 .onErrorResumeNext(e -> {

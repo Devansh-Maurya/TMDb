@@ -60,11 +60,11 @@ public abstract class MovieDao {
     public abstract PagingSource<Integer, Movie> getBookmarkedMovies();
 
     @Transaction
-    @Query("SELECT * FROM movie WHERE id IN (SELECT trending_movie.id FROM trending_movie) ORDER BY timestamp")
+    @Query("SELECT movie.* FROM movie, trending_movie AS tm WHERE movie.id == tm.id ORDER BY tm.page, tm.list_position")
     public abstract PagingSource<Integer, Movie> getTrendingMovies();
 
     @Transaction
-    @Query("SELECT * FROM movie WHERE id IN (SELECT trending_movie.id FROM trending_movie)")
+    @Query("SELECT movie.* FROM movie, now_playing_movie AS np WHERE movie.id == np.id ORDER BY np.page, np.list_position")
     public abstract PagingSource<Integer, Movie> getNowPlayingMovies();
 
     public PagingSource<Integer, Movie> getMovies(@MoviesListType int type) {
@@ -85,10 +85,10 @@ public abstract class MovieDao {
     public abstract void insertMovieItems(List<Movie> movies);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public abstract void insertTrendingMovieIds(List<TrendingMovie> trendingMovies);
+    protected abstract void insertTrendingMovieIds(List<TrendingMovie> trendingMovies);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public abstract void insertNowPlayingMovies(List<NowPlayingMovie> nowPlayingMovies);
+    protected abstract void insertNowPlayingMovies(List<NowPlayingMovie> nowPlayingMovies);
 
     @Transaction
     public void insertTrendingMovies(List<Movie> movies, List<TrendingMovie> trendingMovies) {

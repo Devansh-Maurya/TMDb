@@ -21,13 +21,15 @@ public class MoviesList {
 
     public static final int PAGE_SIZE = 20;
     public static final int STARTING_PAGE = 1;
-    public static final int INAVLID_PAGE = -1;
+    public static final int INVALID_PAGE = -1;
 
     @SerializedName("results") public final List<Movie> results;
     @SerializedName("page") public final int page;
+    @SerializedName("total_pages") public final int totalPages;
 
     public MoviesList() {
         this.results = null;
-        this.page = -1;
+        this.page = INVALID_PAGE;
+        this.totalPages = INVALID_PAGE;
     }
 }

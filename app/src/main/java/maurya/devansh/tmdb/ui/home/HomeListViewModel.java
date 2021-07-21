@@ -8,10 +8,9 @@ import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import maurya.devansh.tmdb.data.model.Movie;
-import maurya.devansh.tmdb.data.model.MoviesList;
 import maurya.devansh.tmdb.data.repository.MovieRepository;
-import maurya.devansh.tmdb.di.qualifier.MoviesListTypeQualifier;
 import maurya.devansh.tmdb.ui.base.BaseViewModel;
+import maurya.devansh.tmdb.utils.common.MoviesListType;
 
 /**
  * Created by devansh on 17/07/21.
@@ -21,18 +20,22 @@ public class HomeListViewModel extends BaseViewModel {
 
     private final MovieRepository movieRepository;
 
-    public final LiveData<PagingData<Movie>> movieListLiveData;
+    public LiveData<PagingData<Movie>> movieListLiveData = null;
 
-    // FIXME: 18/07/21 How to pass other movie list type? Ask someone
     @Inject
     HomeListViewModel(
             CompositeDisposable compositeDisposable,
-            MovieRepository movieRepository,
-            @MoviesListTypeQualifier(MoviesList.TYPE_TRENDING) int moviesListType
+            MovieRepository movieRepository
     ) {
         super(compositeDisposable);
         this.movieRepository = movieRepository;
-        movieListLiveData = movieRepository.getMoviesList(moviesListType);
+    }
+
+    public LiveData<PagingData<Movie>> getMovies(@MoviesListType int movieListType) {
+        if (movieListLiveData == null) {
+            movieListLiveData = movieRepository.getMoviesList(movieListType);
+        }
+        return movieListLiveData;
     }
 
     public void bookmarkMovie(Movie movie, boolean isBookmarked) {
