@@ -52,6 +52,8 @@ public class DetailFragment extends DaggerBaseFragment<DetailViewModel, Fragment
     }
 
     private void updateUi(MovieDetail data) {
+        binding().tvOverviewTitle.setVisibility(View.VISIBLE);
+
         String posterUrl = ApiUtils.getTmdbImageUrl(data.posterPath);
         Glide.with(binding().ivPoster)
             .load(posterUrl)
