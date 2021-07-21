@@ -32,17 +32,17 @@ public abstract class MovieDao {
     public abstract Completable deleteBookmarkedMovie(BookmarkedMovie movieId);
 
     @Query("DELETE FROM trending_movie")
-    protected abstract Completable deleteAllTrendingMovies();
+    protected abstract void deleteAllTrendingMovies();
 
     @Query("DELETE FROM now_playing_movie")
-    protected abstract Completable deleteAllNowPlayingMovies();
+    protected abstract void deleteAllNowPlayingMovies();
 
-    public Completable deleteMovies(@MoviesListType int type) {
+    public void deleteMovies(@MoviesListType int type) {
         switch (type) {
             case MoviesList.TYPE_TRENDING:
-                return deleteAllTrendingMovies();
+                deleteAllTrendingMovies();
             case MoviesList.TYPE_NOW_PLAYING:
-                return deleteAllNowPlayingMovies();
+                deleteAllNowPlayingMovies();
             case MoviesList.TYPE_BOOKMARKED:
 //                return getBookmarkedMovies();
             case MoviesList.TYPE_SEARCH_RESULT:

@@ -127,10 +127,6 @@ public class MovieRepository {
         databaseService.movieDao().insertTrendingMovies(movies, trendingMovies);
     }
 
-    public Completable deleteMovies(@MoviesListType int movieListType) {
-        return movieDao.deleteMovies(movieListType);
-    }
-
     public void insertMovies(@MoviesListType int movieListType, MoviesList moviesList) {
         List<Movie> movies;
         List<TrendingMovie> movieIds;
@@ -228,6 +224,7 @@ public class MovieRepository {
         private final CompositeDisposable compositeDisposable;
 
         private final MovieRemoteKeyDao remoteKeyDao;
+        private final MovieDao movieDao;
 
         public MoviesRemoteMediator(
             MovieRepository movieRepository,
@@ -239,6 +236,7 @@ public class MovieRepository {
             this.compositeDisposable = compositeDisposable;
 
             remoteKeyDao = movieRepository.remoteKeyDao;
+            movieDao = movieRepository.movieDao;
         }
 
         @NonNull
@@ -275,7 +273,7 @@ public class MovieRepository {
 
                             movieRepository.databaseService.runInTransaction(() -> {
                                 if (loadType == LoadType.REFRESH) {
-                                    movieRepository.deleteMovies(movieListType);
+                                    movieDao.deleteMovies(movieListType);
                                     remoteKeyDao.deleteKey(movieListType);
                                 }
 
