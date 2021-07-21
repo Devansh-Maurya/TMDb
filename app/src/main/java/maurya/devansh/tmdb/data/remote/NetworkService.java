@@ -1,8 +1,10 @@
 package maurya.devansh.tmdb.data.remote;
 
 import io.reactivex.Single;
+import maurya.devansh.tmdb.data.model.MovieDetail;
 import maurya.devansh.tmdb.data.model.MoviesList;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -20,4 +22,7 @@ public interface NetworkService {
 
     @GET("search/movie")
     Single<MoviesList> searchMovies(@Query("query") String query, @Query("page") int page);
+
+    @GET("movie/{movie_id}")
+    Single<MovieDetail> getMovieDetail(@Path("movie_id") int movieId);
 }

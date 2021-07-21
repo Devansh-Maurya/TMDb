@@ -20,6 +20,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import maurya.devansh.tmdb.data.local.db.DatabaseService;
@@ -27,6 +28,7 @@ import maurya.devansh.tmdb.data.local.db.dao.MovieDao;
 import maurya.devansh.tmdb.data.local.db.dao.MovieRemoteKeyDao;
 import maurya.devansh.tmdb.data.model.BookmarkedMovie;
 import maurya.devansh.tmdb.data.model.Movie;
+import maurya.devansh.tmdb.data.model.MovieDetail;
 import maurya.devansh.tmdb.data.model.MovieRemoteKey;
 import maurya.devansh.tmdb.data.model.MoviesList;
 import maurya.devansh.tmdb.data.model.NowPlayingMovie;
@@ -47,6 +49,8 @@ public class MovieRepository {
     public final MovieDao movieDao;
     public final MovieRemoteKeyDao remoteKeyDao;
 
+    private CompositeDisposable compositeDisposable;
+
     @Inject
     MovieRepository(
         NetworkService networkService,
@@ -57,6 +61,10 @@ public class MovieRepository {
 
         movieDao = databaseService.movieDao();
         remoteKeyDao = databaseService.movieRemoteKeyDao();
+    }
+
+    public void setCompositeDisposable(CompositeDisposable compositeDisposable) {
+        this.compositeDisposable = compositeDisposable;
     }
 
     public Single<MoviesList> getMoviesListFromNetwork(@MoviesListType int type, int page, String query) {
@@ -132,6 +140,14 @@ public class MovieRepository {
         }
     }
 
+    public LiveData<MovieDetail> getMovieDetail(int movieId) {
+        compositeDisposable.add(networkService.getMovieDetail(movieId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribe(movieDao::insertMovieDetail, throwable -> {})
+        );
+        return movieDao.getMovieDetail(movieId);
+    }
 
     private static class MoviesRemoteMediator extends RxRemoteMediator<Integer, Movie> {
 

@@ -28,8 +28,8 @@
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail" >
         <argument
-            android:name="imageUrl"
-            app:argType="string" />
+            android:name="movieId"
+            app:argType="integer" />
     </fragment>
 
 
