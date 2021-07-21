@@ -37,23 +37,14 @@ public class DetailFragment extends DaggerBaseFragment<DetailViewModel, Fragment
     @Override
     protected void setupView(@NonNull View view) {
         DetailFragmentArgs args = DetailFragmentArgs.fromBundle(getArguments());
-//        binding().recyclerView.setAdapter(movieAdapter);
         Glide.with(binding().ivPoster)
             .load(args.getImageUrl())
             .into(binding().ivPoster);
-//        DetailFragmentDirections.actionOpenDetailScreen()
+        binding().tvTitle.setText("Very Famous Movie");
     }
 
     @Override
     protected void setupObservers() {
-        if (getArguments() != null) {
-            int movieListType = getArguments().getInt(TYPE);
-
-//            viewModel.getMovies(movieListType).observe(getViewLifecycleOwner(), movies -> {
-////                binding().progressBar.setVisibility(View.GONE);
-//                movieAdapter.submitData(getViewLifecycleOwner().getLifecycle(), movies);
-//            });
-        }
     }
 
     @Override
