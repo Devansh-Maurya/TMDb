@@ -70,7 +70,10 @@ public abstract class MovieDao {
     public abstract PagingSource<Integer, Movie> getTrendingMovies();
 
     @Transaction
-    @Query("SELECT movie.* FROM movie, now_playing_movie AS np WHERE movie.id == np.id ORDER BY np.page, np.list_position")
+    @Query("SELECT bookmarked_movie.id AS bookmark_id, movie.* FROM movie, now_playing_movie AS np " +
+        "LEFT JOIN bookmarked_movie ON movie.id == bookmarked_movie.id " +
+        "WHERE movie.id == np.id " +
+        "ORDER BY np.page, np.list_position")
     public abstract PagingSource<Integer, Movie> getNowPlayingMovies();
 
     public PagingSource<Integer, Movie> getMovies(@MoviesListType int type) {
