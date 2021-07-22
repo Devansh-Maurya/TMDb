@@ -7,22 +7,31 @@ import android.view.View;
 
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.core.util.Pair;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import maurya.devansh.tmdb.R;
 import maurya.devansh.tmdb.databinding.ActivityMainBinding;
+import maurya.devansh.tmdb.ui.base.DaggerBaseActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends DaggerBaseActivity<MainViewModel, ActivityMainBinding> {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+    protected Pair<ViewModelStoreOwner, Class<MainViewModel>> provideViewModelCreators() {
+        return new Pair<>(this, MainViewModel.class);
+    }
 
+    @Override
+    protected ActivityMainBinding provideViewBinding() {
+        return ActivityMainBinding.inflate(getLayoutInflater());
+    }
+
+    @Override
+    protected void setupView(@Nullable Bundle savedInstanceState) {
         NavController navController = Navigation.findNavController(this, R.id.navHost);
         NavigationUI.setupWithNavController(binding.bottomNavigation, navController);
 
@@ -35,6 +44,17 @@ public class MainActivity extends AppCompatActivity {
                 binding.bottomNavigation.setVisibility(View.VISIBLE);
             }
         }));
+    }
+
+    @Override
+    protected void setupObservers() {
+        viewModel.getBookmarkMovieLiveData().observe(this, movie -> {
+            if (movie.isBookmarked()) {
+                toast("Bookmarked " + movie.title);
+            } else {
+                toast("Bookmark removed");
+            }
+        });
     }
 
     @ColorInt

@@ -1,12 +1,12 @@
 package maurya.devansh.tmdb.ui.search;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModelKt;
 import androidx.paging.PagingData;
 import androidx.paging.PagingLiveData;
 
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
@@ -24,15 +24,11 @@ import maurya.devansh.tmdb.ui.base.BaseViewModel;
 
 public class SearchViewModel extends BaseViewModel {
 
-    /**
-     * Time delay to fetch suggestions while user is typing the search keywords.
-     */
-    public static final long TYPING_DELAY = 300;
+    // Time delay to fetch suggestions while user is typing the search keywords.
+    private static final long TYPING_DELAY = 300;
 
     private final MovieRepository movieRepository;
-
     private final PublishSubject<String> searchPublishSubject = PublishSubject.create();
-    public final MediatorLiveData<PagingData<Movie>> searchResultsLiveData = new MediatorLiveData<>();
 
     @Inject
     SearchViewModel(
@@ -41,21 +37,20 @@ public class SearchViewModel extends BaseViewModel {
     ) {
         super(compositeDisposable);
         this.movieRepository = movieRepository;
-        setupSearchObserver();
     }
 
-    private void setupSearchObserver() {
+    public void setupSearchObserver(Consumer<LiveData<PagingData<Movie>>> consumer) {
         compositeDisposable.add(searchPublishSubject
             .debounce(TYPING_DELAY, TimeUnit.MILLISECONDS)
             .filter(query -> !query.isEmpty())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(query -> {
-                LiveData<PagingData<Movie>> pagingDataLiveData = movieRepository.searchMovies(query);
-                // TODO: 21/07/21 Check if this works. If yes, how? Issue with rotating device
+            .subscribe(pagingData -> {
+                LiveData<PagingData<Movie>> pagingDataLiveData = movieRepository.searchMovies(pagingData);
                 PagingLiveData.cachedIn(pagingDataLiveData, ViewModelKt.getViewModelScope(this));
-                searchResultsLiveData.addSource(pagingDataLiveData, searchResultsLiveData::setValue);
-            }, throwable -> {})
+                consumer.accept(pagingDataLiveData);
+            }, throwable -> {
+            })
         );
     }
 

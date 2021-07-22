@@ -56,17 +56,24 @@ public abstract class MovieDao {
         }
     }
 
-    // TODO: 18/07/21 Add order query
     @Transaction
-    @Query("SELECT * FROM movie WHERE id IN (SELECT bookmarked_movie.id FROM bookmarked_movie)")
+    @Query("SELECT * FROM movie " +
+        "WHERE id IN (SELECT bookmarked_movie.id FROM bookmarked_movie) " +
+        "ORDER BY movie.bookmark_timestamp DESC")
     public abstract PagingSource<Integer, Movie> getBookmarkedMovies();
 
     @Transaction
-    @Query("SELECT movie.* FROM movie, trending_movie AS tm WHERE movie.id == tm.id ORDER BY tm.page, tm.list_position")
+    @Query("SELECT bookmarked_movie.id AS bookmark_id, movie.* FROM movie, trending_movie AS tm " +
+        "LEFT JOIN bookmarked_movie ON movie.id == bookmarked_movie.id " +
+        "WHERE movie.id == tm.id " +
+        "ORDER BY tm.page, tm.list_position")
     public abstract PagingSource<Integer, Movie> getTrendingMovies();
 
     @Transaction
-    @Query("SELECT movie.* FROM movie, now_playing_movie AS np WHERE movie.id == np.id ORDER BY np.page, np.list_position")
+    @Query("SELECT bookmarked_movie.id AS bookmark_id, movie.* FROM movie, now_playing_movie AS np " +
+        "LEFT JOIN bookmarked_movie ON movie.id == bookmarked_movie.id " +
+        "WHERE movie.id == np.id " +
+        "ORDER BY np.page, np.list_position")
     public abstract PagingSource<Integer, Movie> getNowPlayingMovies();
 
     public PagingSource<Integer, Movie> getMovies(@MoviesListType int type) {
@@ -107,6 +114,9 @@ public abstract class MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void insertMovieDetail(MovieDetail movieDetail);
 
-    @Query("SELECT * FROM movie_detail WHERE id == :movieId")
+    @Transaction
+    @Query("SELECT movie_detail.*, bookmarked_movie.id AS bookmark_id FROM movie_detail " +
+        "LEFT JOIN bookmarked_movie ON movie_detail.id == bookmarked_movie.id " +
+        "WHERE movie_detail.id == :movieId")
     public abstract LiveData<MovieDetail> getMovieDetail(int movieId);
 }

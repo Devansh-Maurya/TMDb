@@ -17,19 +17,22 @@ import maurya.devansh.tmdb.ui.base.ActionPerformer;
 public class MovieAdapter extends PagingDataAdapter<Movie, MovieViewHolder> {
 
     private final ActionPerformer actionPerformer;
+    private final boolean showBookmarkIcon;
 
-    public MovieAdapter(ActionPerformer actionPerformer) {
+    public MovieAdapter(ActionPerformer actionPerformer, boolean showBookmarkIcon) {
         super(Movie.DIFF_CALLBACK);
         this.actionPerformer = actionPerformer;
+        this.showBookmarkIcon = showBookmarkIcon;
     }
 
     @NonNull
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new MovieViewHolder(
-                LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_movie, parent, false),
-                actionPerformer
+            LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_movie, parent, false),
+            actionPerformer,
+            showBookmarkIcon
         );
     }
 

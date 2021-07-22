@@ -40,8 +40,14 @@ public class Movie {
     @ColumnInfo(name = "original_language")
     public final String originalLanguage;
 
+    @ColumnInfo(name = "bookmark_id")
+    public final int bookmarkId;
+
+    @ColumnInfo(name = "bookmark_timestamp")
+    public long bookmarkTimestamp;
+
     @Ignore
-    public int isBookmarked;
+    private boolean isBookmarked;
 
     public static DiffUtil.ItemCallback<Movie> DIFF_CALLBACK = new DiffUtil.ItemCallback<Movie>() {
         @Override
@@ -59,27 +65,41 @@ public class Movie {
                  String posterPath,
                  String releaseDate,
                  String title,
-                 String originalLanguage
+                 String originalLanguage,
+                 int bookmarkId,
+                 long bookmarkTimestamp
     ) {
         this.id = id;
         this.posterPath = posterPath;
         this.releaseDate = releaseDate;
         this.title = title;
         this.originalLanguage = originalLanguage;
+        this.bookmarkId = bookmarkId;
+        this.bookmarkTimestamp = bookmarkTimestamp;
+    }
+
+    @Ignore
+    public Movie(int id,
+                 String posterPath,
+                 String releaseDate,
+                 String title,
+                 String originalLanguage
+    ) {
+        this(id, posterPath, releaseDate, title, originalLanguage, 0, 0);
     }
 
     @Ignore
     public Movie() {
         this(-1, "", "", "", "");
-        isBookmarked = 0;
+        isBookmarked = false;
     }
 
-    public void setBookmarked(boolean bookmarked) {
-        isBookmarked = bookmarked ? 1 : 0;
+    public void setBookmarked(boolean isBookmarked) {
+        this.isBookmarked = isBookmarked;
     }
 
-    public boolean bookmarked() {
-        return isBookmarked == 1;
+    public boolean isBookmarked() {
+        return isBookmarked || bookmarkId != 0;
     }
 
     @Override
@@ -88,14 +108,15 @@ public class Movie {
         if (o == null || getClass() != o.getClass()) return false;
         Movie movie = (Movie) o;
         return id == movie.id &&
-                posterPath != null && posterPath.equals(movie.posterPath) &&
-                releaseDate != null && releaseDate.equals(movie.releaseDate) &&
-                title != null && title.equals(movie.title) &&
-                originalLanguage != null && originalLanguage.equals(movie.originalLanguage);
+            bookmarkId == movie.bookmarkId &&
+            Objects.equals(posterPath, movie.posterPath) &&
+            Objects.equals(releaseDate, movie.releaseDate) &&
+            Objects.equals(title, movie.title) &&
+            Objects.equals(originalLanguage, movie.originalLanguage);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(posterPath, releaseDate, id, title, originalLanguage);
+        return Objects.hash(id, posterPath, releaseDate, title, originalLanguage, bookmarkId);
     }
 }

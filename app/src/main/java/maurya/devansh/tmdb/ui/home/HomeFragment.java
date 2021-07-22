@@ -6,8 +6,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.util.Pair;
-import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -19,14 +17,9 @@ import java.util.List;
 import maurya.devansh.tmdb.data.model.MoviesList;
 import maurya.devansh.tmdb.data.model.Tab;
 import maurya.devansh.tmdb.databinding.FragmentHomeBinding;
-import maurya.devansh.tmdb.ui.base.DaggerBaseFragment;
+import maurya.devansh.tmdb.ui.base.BaseFragment;
 
-public class HomeFragment extends DaggerBaseFragment<HomeListViewModel, FragmentHomeBinding> {
-
-    @Override
-    protected Pair<ViewModelStoreOwner, Class<HomeListViewModel>> provideViewModelCreators() {
-        return new Pair<>(this, HomeListViewModel.class);
-    }
+public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
 
     @Override
     protected FragmentHomeBinding provideViewBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
@@ -36,12 +29,12 @@ public class HomeFragment extends DaggerBaseFragment<HomeListViewModel, Fragment
     @Override
     protected void setupView(@NonNull @NotNull View view) {
         List<Tab> tabs = Arrays.asList(
-                new Tab(MoviesList.TYPE_TRENDING, "Trending"),
-                new Tab(MoviesList.TYPE_NOW_PLAYING, "Now Playing")
+            new Tab(MoviesList.TYPE_TRENDING, "Trending"),
+            new Tab(MoviesList.TYPE_NOW_PLAYING, "Now Playing")
         );
         binding().viewPager.setAdapter(new HomeViewPagerAdapter(this, tabs));
         new TabLayoutMediator(binding().tabLayout, binding().viewPager, (tab, position) ->
-                tab.setText(tabs.get(position).title)
+            tab.setText(tabs.get(position).title)
         ).attach();
     }
 }

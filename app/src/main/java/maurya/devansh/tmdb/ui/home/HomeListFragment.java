@@ -8,9 +8,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
 import maurya.devansh.tmdb.databinding.FragmentHomeListBinding;
+import maurya.devansh.tmdb.ui.MainViewModel;
 import maurya.devansh.tmdb.ui.base.Action;
 import maurya.devansh.tmdb.ui.base.ActionPerformer;
 import maurya.devansh.tmdb.ui.base.DaggerBaseFragment;
@@ -21,7 +23,8 @@ public class HomeListFragment extends DaggerBaseFragment<HomeListViewModel, Frag
 
     private static final String TYPE = "type";
 
-    private final MovieAdapter movieAdapter = new MovieAdapter(this);
+    private MainViewModel mainViewModel;
+    private MovieAdapter movieAdapter;
 
     public static HomeListFragment newInstance(int type) {
         Bundle args = new Bundle();
@@ -43,27 +46,28 @@ public class HomeListFragment extends DaggerBaseFragment<HomeListViewModel, Frag
 
     @Override
     protected void setupView(@NonNull View view) {
+        mainViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel.class);
+
+        movieAdapter = new MovieAdapter(this, true);
+        movieAdapter.refresh();
         binding().recyclerView.setAdapter(movieAdapter);
-        if (getArguments() != null) {
-            int movieListType = getArguments().getInt(TYPE);
-            viewModel.getMovies(movieListType);
-        }
     }
 
     @Override
     protected void setupObservers() {
-        viewModel.movieListLiveData.observe(getViewLifecycleOwner(), movies -> {
-            binding().progressBar.setVisibility(View.GONE);
-            movieAdapter.submitData(getViewLifecycleOwner().getLifecycle(), movies);
-        });
+        if (getArguments() != null) {
+            int movieListType = getArguments().getInt(TYPE);
+            viewModel.getMovies(movieListType).observe(getViewLifecycleOwner(), movies -> {
+                binding().progressBar.setVisibility(View.GONE);
+                movieAdapter.submitData(getViewLifecycleOwner().getLifecycle(), movies);
+            });
+        }
     }
 
     @Override
     public void performAction(Action action) {
         if (action instanceof Action.MovieBookmarked) {
-            Action.MovieBookmarked movieBookmarked = (Action.MovieBookmarked) action;
-            viewModel.bookmarkMovie(movieBookmarked.movie, movieBookmarked.isBookmarked);
-            toast(movieBookmarked.movie.title + movieBookmarked.isBookmarked);
+            mainViewModel.bookmarkMovie(((Action.MovieBookmarked) action));
         }
     }
 }

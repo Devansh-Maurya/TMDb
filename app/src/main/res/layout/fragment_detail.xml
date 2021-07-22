@@ -29,13 +29,16 @@
         app:tint="?attr/colorOnPrimary"
         tools:ignore="ContentDescription" />
 
-    <ImageView
+    <CheckBox
         android:id="@+id/ivBookmark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:button="@drawable/sl_bookmark"
+        android:buttonTint="@color/white"
         android:elevation="10dp"
-        android:padding="16dp"
-        android:src="@drawable/sl_bookmark"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
         app:layout_constraintEnd_toStartOf="@id/ivShare"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="?attr/colorOnPrimary"

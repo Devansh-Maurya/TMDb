@@ -1,7 +1,9 @@
 package maurya.devansh.tmdb.ui.bookmark;
 
 import androidx.lifecycle.LiveData;
-import androidx.paging.PagedList;
+import androidx.lifecycle.ViewModelKt;
+import androidx.paging.PagingData;
+import androidx.paging.PagingLiveData;
 
 import javax.inject.Inject;
 
@@ -16,17 +18,20 @@ import maurya.devansh.tmdb.ui.base.BaseViewModel;
 
 public class BookmarksViewModel extends BaseViewModel {
 
-    public final LiveData<PagedList<Movie>> movieListLiveData;
+    private final MovieRepository movieRepository;
 
     @Inject
     BookmarksViewModel(
-            CompositeDisposable compositeDisposable,
-            MovieRepository movieRepository
+        CompositeDisposable compositeDisposable,
+        MovieRepository movieRepository
     ) {
         super(compositeDisposable);
+        this.movieRepository = movieRepository;
+    }
 
-//        DataSource.Factory<Integer, Movie> factory = movieRepository.getBookmarkedMovies();
-//        movieListLiveData = new LivePagedListBuilder<>(factory, MoviePagingDataSource.PAGE_SIZE).build();
-        movieListLiveData = null;
+    public LiveData<PagingData<Movie>> getBookmarkedMovies() {
+        LiveData<PagingData<Movie>> pagingDataLiveData = movieRepository.getBookmarkedMovies();
+        PagingLiveData.cachedIn(pagingDataLiveData, ViewModelKt.getViewModelScope(this));
+        return pagingDataLiveData;
     }
 }
