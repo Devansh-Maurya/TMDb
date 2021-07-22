@@ -27,12 +27,15 @@
         android:name="maurya.devansh.tmdb.ui.detail.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail">
-        <argument
-            android:name="movieId"
-            app:argType="integer" />
         <deepLink
             android:id="@+id/deepLink"
             app:uri="tmdbapp://movie/detail/{movieId}" />
+        <argument
+            android:name="movieId"
+            app:argType="integer" />
+        <argument
+            android:name="movie"
+            app:argType="maurya.devansh.tmdb.data.model.Movie" />
     </fragment>
 
     <action

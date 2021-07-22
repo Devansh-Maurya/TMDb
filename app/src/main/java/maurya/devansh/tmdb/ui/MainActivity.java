@@ -46,6 +46,17 @@ public class MainActivity extends DaggerBaseActivity<MainViewModel, ActivityMain
         }));
     }
 
+    @Override
+    protected void setupObservers() {
+        viewModel.getBookmarkMovieLiveData().observe(this, movie -> {
+            if (movie.bookmarked()) {
+                toast("Bookmarked " + movie.title);
+            } else {
+                toast("Bookmark removed");
+            }
+        });
+    }
+
     @ColorInt
     private int getColorFromAttribute(@AttrRes int res) {
         TypedValue typedValue = new TypedValue();

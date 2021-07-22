@@ -28,11 +28,10 @@ public abstract class DaggerBaseActivity<VM extends BaseViewModel, VB extends Vi
     @CallSuper
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         AndroidInjection.inject(this);
-        super.onCreate(savedInstanceState);
-
         Pair<ViewModelStoreOwner, Class<VM>> vmCreators = provideViewModelCreators();
         viewModel = (new ViewModelProvider(vmCreators.first, viewModelFactory))
             .get(vmCreators.second);
+        super.onCreate(savedInstanceState);
     }
 
     protected abstract Pair<ViewModelStoreOwner, Class<VM>> provideViewModelCreators();

@@ -9,14 +9,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ShareCompat;
 import androidx.core.util.Pair;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
 
 import maurya.devansh.tmdb.R;
+import maurya.devansh.tmdb.data.model.Movie;
 import maurya.devansh.tmdb.data.model.MovieDetail;
 import maurya.devansh.tmdb.databinding.FragmentDetailBinding;
+import maurya.devansh.tmdb.ui.MainViewModel;
 import maurya.devansh.tmdb.ui.base.Action;
 import maurya.devansh.tmdb.ui.base.ActionPerformer;
 import maurya.devansh.tmdb.ui.base.DaggerBaseFragment;
@@ -24,6 +27,9 @@ import maurya.devansh.tmdb.utils.common.ApiUtils;
 
 public class DetailFragment extends DaggerBaseFragment<DetailViewModel, FragmentDetailBinding>
     implements ActionPerformer {
+
+    private MainViewModel mainViewModel;
+    private DetailFragmentArgs args;
 
     @Override
     protected Pair<ViewModelStoreOwner, Class<DetailViewModel>> provideViewModelCreators() {
@@ -37,7 +43,9 @@ public class DetailFragment extends DaggerBaseFragment<DetailViewModel, Fragment
 
     @Override
     protected void setupView(@NonNull View view) {
-        DetailFragmentArgs args = DetailFragmentArgs.fromBundle(getArguments());
+        mainViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel.class);
+        args = DetailFragmentArgs.fromBundle(getArguments());
+
         viewModel.getMovieDetail(args.getMovieId());
     }
 
@@ -65,8 +73,12 @@ public class DetailFragment extends DaggerBaseFragment<DetailViewModel, Fragment
         binding().tvInfo.setText(data.getInfoString());
         binding().tvOverview.setText(data.overview);
 
-        binding().ivShare.setOnClickListener(v -> shareMovie(data));
         binding().ivBack.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
+        binding().ivShare.setOnClickListener(v -> shareMovie(data));
+        binding().ivBookmark.setOnClickListener(v -> {
+            Movie movie = args.getMovie();
+            mainViewModel.bookmarkMovie(movie, movie.bookmarked());
+        });
     }
 
     @Override

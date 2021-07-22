@@ -51,7 +51,7 @@ public class MovieViewHolder extends BaseViewHolder<Movie, ItemMovieBinding> {
         binding.buttonBookmark.setChecked(data.bookmarked());
 
         binding.getRoot().setOnClickListener(view -> {
-            NavDirections action = NavGraphMainDirections.actionOpenDetailScreen(data.id);
+            NavDirections action = NavGraphMainDirections.actionOpenDetailScreen(data.id, data);
             Navigation.findNavController(binding.getRoot()).navigate(action);
         });
     }
