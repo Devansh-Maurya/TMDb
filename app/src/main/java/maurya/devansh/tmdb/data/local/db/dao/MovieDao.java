@@ -56,10 +56,10 @@ public abstract class MovieDao {
         }
     }
 
-    // TODO: 18/07/21 Add order query
-    // SELECT movie.*, bookmarked_movie.id AS bookmark_id FROM movie LEFT JOIN bookmarked_movie ON movie.id == bookmarked_movie.id
     @Transaction
-    @Query("SELECT * FROM movie WHERE id IN (SELECT bookmarked_movie.id FROM bookmarked_movie)")
+    @Query("SELECT * FROM movie " +
+        "WHERE id IN (SELECT bookmarked_movie.id FROM bookmarked_movie) " +
+        "ORDER BY movie.bookmark_timestamp DESC")
     public abstract PagingSource<Integer, Movie> getBookmarkedMovies();
 
     @Transaction
