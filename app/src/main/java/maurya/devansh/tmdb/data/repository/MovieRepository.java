@@ -108,7 +108,6 @@ public class MovieRepository {
     public Completable bookmarkMovie(@NonNull Movie movie, boolean isBookmarked) {
         BookmarkedMovie movieId = new BookmarkedMovie(movie.id);
         movie.setBookmarked(isBookmarked);
-        movie.bookmarkTimestamp = System.currentTimeMillis();
         if (isBookmarked) {
             return Completable.fromRunnable(() -> databaseService.movieDao().bookmarkMovie(movieId, movie));
         } else {

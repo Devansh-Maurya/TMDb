@@ -14,13 +14,10 @@ import androidx.lifecycle.ViewModelStoreOwner;
 import maurya.devansh.tmdb.R;
 import maurya.devansh.tmdb.databinding.FragmentSearchBinding;
 import maurya.devansh.tmdb.ui.MainViewModel;
-import maurya.devansh.tmdb.ui.base.Action;
-import maurya.devansh.tmdb.ui.base.ActionPerformer;
 import maurya.devansh.tmdb.ui.base.DaggerBaseFragment;
 import maurya.devansh.tmdb.ui.home.movie.MovieAdapter;
 
-public class SearchFragment extends DaggerBaseFragment<SearchViewModel, FragmentSearchBinding>
-    implements ActionPerformer {
+public class SearchFragment extends DaggerBaseFragment<SearchViewModel, FragmentSearchBinding> {
 
     private MainViewModel mainViewModel;
     private final MovieAdapter movieAdapter = new MovieAdapter(null, false);
@@ -71,12 +68,5 @@ public class SearchFragment extends DaggerBaseFragment<SearchViewModel, Fragment
                 binding().progressBar.setVisibility(View.GONE);
                 movieAdapter.submitData(getViewLifecycleOwner().getLifecycle(), movies);
             }));
-    }
-
-    @Override
-    public void performAction(Action action) {
-        if (action instanceof Action.MovieBookmarked) {
-            mainViewModel.bookmarkMovie(((Action.MovieBookmarked) action));
-        }
     }
 }

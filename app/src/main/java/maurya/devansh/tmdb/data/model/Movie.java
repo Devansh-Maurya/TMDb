@@ -41,10 +41,10 @@ public class Movie {
     public final String originalLanguage;
 
     @ColumnInfo(name = "bookmark_id")
-    public final int bookmarkId;
+    private int bookmarkId;
 
     @ColumnInfo(name = "bookmark_timestamp")
-    public long bookmarkTimestamp;
+    private long bookmarkTimestamp;
 
     @Ignore
     private boolean isBookmarked;
@@ -96,10 +96,22 @@ public class Movie {
 
     public void setBookmarked(boolean isBookmarked) {
         this.isBookmarked = isBookmarked;
+        if (!isBookmarked) {
+            bookmarkId = 0;
+            bookmarkTimestamp = 0;
+        }
     }
 
     public boolean isBookmarked() {
         return isBookmarked || bookmarkId != 0;
+    }
+
+    public int getBookmarkId() {
+        return bookmarkId;
+    }
+
+    public long getBookmarkTimestamp() {
+        return bookmarkTimestamp;
     }
 
     @Override
