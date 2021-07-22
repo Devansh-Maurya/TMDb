@@ -92,16 +92,20 @@ public class MovieRepository {
         return getMoviesList(type, "");
     }
 
+    public LiveData<PagingData<Movie>> getBookmarkedMovies() {
+        PagingConfig config = new PagingConfig(MoviesList.PAGE_SIZE, MoviesList.PAGE_SIZE, false);
+        PagingSource<Integer, Movie> pagingSource = movieDao.getBookmarkedMovies();
+        return PagingLiveData.getLiveData(
+            new Pager<>(config, MoviesList.STARTING_PAGE, null, () -> pagingSource)
+        );
+    }
+
     public LiveData<PagingData<Movie>> searchMovies(String query) {
         PagingConfig config = new PagingConfig(MoviesList.PAGE_SIZE, MoviesList.PAGE_SIZE, false);
         PagingSource<Integer, Movie> pagingSource = new SearchMoviePagingSource(this, query);
         return PagingLiveData.getLiveData(
             new Pager<>(config, MoviesList.STARTING_PAGE, null, () -> pagingSource)
         );
-    }
-
-    public PagingSource<Integer, Movie> getBookmarkedMovies() {
-        return databaseService.movieDao().getBookmarkedMovies();
     }
 
     public Completable bookmarkMovie(@NonNull Movie movie, boolean isBookmarked) {

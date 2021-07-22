@@ -22,7 +22,7 @@ import maurya.devansh.tmdb.ui.home.movie.MovieAdapter;
 public class SearchFragment extends DaggerBaseFragment<SearchViewModel, FragmentSearchBinding>
     implements ActionPerformer {
 
-    private final MovieAdapter movieAdapter = new MovieAdapter(this);
+    private final MovieAdapter movieAdapter = new MovieAdapter(this, true);
 
     @Override
     protected Pair<ViewModelStoreOwner, Class<SearchViewModel>> provideViewModelCreators() {

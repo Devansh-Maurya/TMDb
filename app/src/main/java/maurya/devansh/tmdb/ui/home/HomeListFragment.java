@@ -21,7 +21,7 @@ public class HomeListFragment extends DaggerBaseFragment<HomeListViewModel, Frag
 
     private static final String TYPE = "type";
 
-    private final MovieAdapter movieAdapter = new MovieAdapter(this);
+    private final MovieAdapter movieAdapter = new MovieAdapter(this, true);
 
     public static HomeListFragment newInstance(int type) {
         Bundle args = new Bundle();

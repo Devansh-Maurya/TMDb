@@ -25,8 +25,11 @@ import maurya.devansh.tmdb.utils.common.ApiUtils;
 
 public class MovieViewHolder extends BaseViewHolder<Movie, ItemMovieBinding> {
 
-    MovieViewHolder(View itemView, ActionPerformer actionPerformer) {
+    private final boolean showBookmarkIcon;
+
+    MovieViewHolder(View itemView, ActionPerformer actionPerformer, boolean showBookmarkIcon) {
         super(itemView, actionPerformer);
+        this.showBookmarkIcon = showBookmarkIcon;
     }
 
     @Override
@@ -45,6 +48,7 @@ public class MovieViewHolder extends BaseViewHolder<Movie, ItemMovieBinding> {
         binding.tvTitle.setText(data.title);
         binding.tvDate.setText(data.releaseDate);
 
+        binding.buttonBookmark.setVisibility(showBookmarkIcon ? View.VISIBLE : View.GONE);
         binding.buttonBookmark.setOnCheckedChangeListener(((buttonView, isChecked) ->
             performAction(new Action.MovieBookmarked(data, isChecked))
         ));

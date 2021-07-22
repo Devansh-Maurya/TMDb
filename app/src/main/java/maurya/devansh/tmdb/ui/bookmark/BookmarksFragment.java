@@ -8,21 +8,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelStoreOwner;
-import androidx.paging.PagedList;
 
 import org.jetbrains.annotations.NotNull;
 
-import maurya.devansh.tmdb.data.model.Movie;
 import maurya.devansh.tmdb.databinding.FragmentBookmarksBinding;
-import maurya.devansh.tmdb.ui.base.Action;
-import maurya.devansh.tmdb.ui.base.ActionPerformer;
 import maurya.devansh.tmdb.ui.base.DaggerBaseFragment;
 import maurya.devansh.tmdb.ui.home.movie.MovieAdapter;
 
-public class BookmarksFragment extends DaggerBaseFragment<BookmarksViewModel, FragmentBookmarksBinding>
-        implements ActionPerformer {
+public class BookmarksFragment extends DaggerBaseFragment<BookmarksViewModel, FragmentBookmarksBinding> {
 
-    private final MovieAdapter movieAdapter = new MovieAdapter(this);
+    private final MovieAdapter movieAdapter = new MovieAdapter(null, false);
 
     @Override
     protected Pair<ViewModelStoreOwner, Class<BookmarksViewModel>> provideViewModelCreators() {
@@ -41,18 +36,9 @@ public class BookmarksFragment extends DaggerBaseFragment<BookmarksViewModel, Fr
 
     @Override
     protected void setupObservers() {
-        viewModel.movieListLiveData.observe(getViewLifecycleOwner(), movies -> {
+        viewModel.getBookmarkedMovies().observe(getViewLifecycleOwner(), movies -> {
             binding().progressBar.setVisibility(View.GONE);
-//            movieAdapter.submitList(movies);
+            movieAdapter.submitData(getViewLifecycleOwner().getLifecycle(), movies);
         });
-    }
-
-    @Override
-    public void performAction(Action action) {
-        // FIXME: 19/07/21 Logic looks correct, need to update DB to see working
-        PagedList<Movie> pagedList = viewModel.movieListLiveData.getValue();
-        if (pagedList != null) {
-            pagedList.getDataSource().invalidate();
-        }
     }
 }
