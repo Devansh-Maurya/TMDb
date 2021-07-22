@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ShareCompat;
 import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelStoreOwner;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
 
@@ -60,6 +61,7 @@ public class DetailFragment extends DaggerBaseFragment<DetailViewModel, Fragment
         binding().tvOverview.setText(data.overview);
 
         binding().ivShare.setOnClickListener(v -> shareMovie(data));
+        binding().ivBack.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
     }
 
     @Override
