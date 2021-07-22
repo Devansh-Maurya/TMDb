@@ -73,7 +73,7 @@ public class DetailFragment extends DaggerBaseFragment<DetailViewModel, Fragment
         binding().ivBack.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
         binding().ivShare.setOnClickListener(v -> shareMovie(data));
         binding().ivBookmark.setOnCheckedChangeListener(((buttonView, isChecked) -> {
-            Movie movie = new Movie(data.id, data.posterPath, data.releaseDate, data.title, data.originalLanguage);
+            Movie movie = new Movie(data.id, data.posterPath, data.releaseDate, data.title, data.originalLanguage, data.id);
             mainViewModel.bookmarkMovie(movie, isChecked);
         }));
     }

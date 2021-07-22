@@ -43,9 +43,6 @@ public class Movie {
     @ColumnInfo(name = "bookmark_id")
     private int bookmarkId;
 
-    @ColumnInfo(name = "bookmark_timestamp")
-    private long bookmarkTimestamp;
-
     @Ignore
     private boolean isBookmarked;
 
@@ -66,8 +63,7 @@ public class Movie {
                  String releaseDate,
                  String title,
                  String originalLanguage,
-                 int bookmarkId,
-                 long bookmarkTimestamp
+                 int bookmarkId
     ) {
         this.id = id;
         this.posterPath = posterPath;
@@ -75,7 +71,6 @@ public class Movie {
         this.title = title;
         this.originalLanguage = originalLanguage;
         this.bookmarkId = bookmarkId;
-        this.bookmarkTimestamp = bookmarkTimestamp;
     }
 
     @Ignore
@@ -85,7 +80,7 @@ public class Movie {
                  String title,
                  String originalLanguage
     ) {
-        this(id, posterPath, releaseDate, title, originalLanguage, 0, 0);
+        this(id, posterPath, releaseDate, title, originalLanguage, 0);
     }
 
     @Ignore
@@ -96,10 +91,7 @@ public class Movie {
 
     public void setBookmarked(boolean isBookmarked) {
         this.isBookmarked = isBookmarked;
-        if (!isBookmarked) {
-            bookmarkId = 0;
-            bookmarkTimestamp = 0;
-        }
+        this.bookmarkId = isBookmarked ? id : 0;
     }
 
     public boolean isBookmarked() {
@@ -108,10 +100,6 @@ public class Movie {
 
     public int getBookmarkId() {
         return bookmarkId;
-    }
-
-    public long getBookmarkTimestamp() {
-        return bookmarkTimestamp;
     }
 
     @Override
