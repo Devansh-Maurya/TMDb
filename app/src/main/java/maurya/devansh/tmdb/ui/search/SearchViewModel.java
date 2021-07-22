@@ -49,7 +49,6 @@ public class SearchViewModel extends BaseViewModel {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(pagingData -> {
                 LiveData<PagingData<Movie>> pagingDataLiveData = movieRepository.searchMovies(pagingData);
-                // TODO: 21/07/21 Check if this works. If yes, how? Issue with rotating device
                 PagingLiveData.cachedIn(pagingDataLiveData, ViewModelKt.getViewModelScope(this));
                 consumer.accept(pagingDataLiveData);
             }, throwable -> {})
