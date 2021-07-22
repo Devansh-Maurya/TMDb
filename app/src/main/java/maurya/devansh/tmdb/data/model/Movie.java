@@ -17,7 +17,7 @@ import java.util.Objects;
  */
 
 @Keep
-@Entity
+@Entity(tableName = "movie")
 public class Movie {
     @SerializedName("id")
     @PrimaryKey
