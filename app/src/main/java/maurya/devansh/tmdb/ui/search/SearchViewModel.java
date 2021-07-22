@@ -24,9 +24,7 @@ import maurya.devansh.tmdb.ui.base.BaseViewModel;
 
 public class SearchViewModel extends BaseViewModel {
 
-    /**
-     * Time delay to fetch suggestions while user is typing the search keywords.
-     */
+    // Time delay to fetch suggestions while user is typing the search keywords.
     private static final long TYPING_DELAY = 300;
 
     private final MovieRepository movieRepository;
@@ -51,7 +49,8 @@ public class SearchViewModel extends BaseViewModel {
                 LiveData<PagingData<Movie>> pagingDataLiveData = movieRepository.searchMovies(pagingData);
                 PagingLiveData.cachedIn(pagingDataLiveData, ViewModelKt.getViewModelScope(this));
                 consumer.accept(pagingDataLiveData);
-            }, throwable -> {})
+            }, throwable -> {
+            })
         );
     }
 
