@@ -49,10 +49,11 @@ public class MovieViewHolder extends BaseViewHolder<Movie, ItemMovieBinding> {
         binding.tvDate.setText(data.releaseDate);
 
         binding.buttonBookmark.setVisibility(showBookmarkIcon ? View.VISIBLE : View.GONE);
+        binding.buttonBookmark.setOnCheckedChangeListener(null);
+        binding.buttonBookmark.setChecked(data.isBookmarked());
         binding.buttonBookmark.setOnCheckedChangeListener(((buttonView, isChecked) ->
             performAction(new Action.MovieBookmarked(data, isChecked))
         ));
-        binding.buttonBookmark.setChecked(data.isBookmarked());
 
         binding.getRoot().setOnClickListener(view -> {
             NavDirections action = NavGraphMainDirections.actionOpenDetailScreen(data.id);

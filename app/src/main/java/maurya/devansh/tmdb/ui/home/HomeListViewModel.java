@@ -8,7 +8,6 @@ import androidx.paging.PagingLiveData;
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 import maurya.devansh.tmdb.data.model.Movie;
 import maurya.devansh.tmdb.data.repository.MovieRepository;
 import maurya.devansh.tmdb.ui.base.BaseViewModel;
@@ -35,13 +34,5 @@ public class HomeListViewModel extends BaseViewModel {
         LiveData<PagingData<Movie>> pagingDataLiveData = movieRepository.getMoviesList(movieListType);
         PagingLiveData.cachedIn(pagingDataLiveData, ViewModelKt.getViewModelScope(this));
         return pagingDataLiveData;
-    }
-
-    public void bookmarkMovie(Movie movie, boolean isBookmarked) {
-        compositeDisposable.add(movieRepository.bookmarkMovie(movie, isBookmarked)
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
-            .subscribe()
-        );
     }
 }

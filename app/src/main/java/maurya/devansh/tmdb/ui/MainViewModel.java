@@ -1,5 +1,6 @@
 package maurya.devansh.tmdb.ui;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -9,6 +10,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import maurya.devansh.tmdb.data.model.Movie;
 import maurya.devansh.tmdb.data.repository.MovieRepository;
+import maurya.devansh.tmdb.ui.base.Action;
 import maurya.devansh.tmdb.ui.base.BaseViewModel;
 
 /**
@@ -35,6 +37,10 @@ public class MainViewModel extends BaseViewModel {
             .observeOn(Schedulers.io())
             .subscribe(() -> bookmarkMovieLiveData.postValue(movie), throwable -> {})
         );
+    }
+
+    public void bookmarkMovie(@NonNull Action.MovieBookmarked movieBookmarkedAction) {
+        bookmarkMovie(movieBookmarkedAction.movie, movieBookmarkedAction.isBookmarked);
     }
 
     public LiveData<Movie> getBookmarkMovieLiveData() {
