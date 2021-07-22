@@ -68,6 +68,7 @@ public class DetailFragment extends DaggerBaseFragment<DetailViewModel, Fragment
         binding().tvTitle.setText(data.title);
         binding().tvInfo.setText(data.getInfoString());
         binding().tvOverview.setText(data.overview);
+        binding().ivBookmark.setChecked(data.isBookmarked());
 
         binding().ivBack.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
         binding().ivShare.setOnClickListener(v -> shareMovie(data));

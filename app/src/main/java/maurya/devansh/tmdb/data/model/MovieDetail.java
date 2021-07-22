@@ -58,7 +58,10 @@ public class MovieDetail {
     public final String overview;
 
     @ColumnInfo(name = "id_dummy")
-    private boolean isDummy = false;
+    private final boolean isDummy;
+
+    @ColumnInfo(name = "bookmark_id")
+    public final int bookmarkId;
 
     public MovieDetail(int id,
                        String posterPath,
@@ -68,7 +71,8 @@ public class MovieDetail {
                        int runtime,
                        List<Genre> genres,
                        String overview,
-                       boolean isDummy
+                       boolean isDummy,
+                       int bookmarkId
     ) {
         this.id = id;
         this.posterPath = posterPath;
@@ -79,16 +83,21 @@ public class MovieDetail {
         this.genres = genres;
         this.overview = overview;
         this.isDummy = isDummy;
+        this.bookmarkId = bookmarkId;
     }
 
     // Dummy object to be used when no data fetched from network
     @Ignore
     public MovieDetail(int id) {
-        this(id, "", "", "", "", 0, new ArrayList<>(), "", true);
+        this(id, "", "", "", "", 0, new ArrayList<>(), "", true, 0);
     }
 
     public boolean isDummy() {
         return isDummy;
+    }
+
+    public boolean isBookmarked() {
+        return bookmarkId != 0;
     }
 
     public String getInfoString() {

@@ -57,6 +57,7 @@ public abstract class MovieDao {
     }
 
     // TODO: 18/07/21 Add order query
+    // SELECT movie.*, bookmarked_movie.id AS bookmark_id FROM movie LEFT JOIN bookmarked_movie ON movie.id == bookmarked_movie.id
     @Transaction
     @Query("SELECT * FROM movie WHERE id IN (SELECT bookmarked_movie.id FROM bookmarked_movie)")
     public abstract PagingSource<Integer, Movie> getBookmarkedMovies();
@@ -107,6 +108,8 @@ public abstract class MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void insertMovieDetail(MovieDetail movieDetail);
 
-    @Query("SELECT * FROM movie_detail WHERE id == :movieId")
+    @Query("SELECT movie_detail.*, bookmarked_movie.id AS bookmark_id FROM movie_detail " +
+        "LEFT JOIN bookmarked_movie ON movie_detail.id == bookmarked_movie.id " +
+        "WHERE movie_detail.id == :movieId")
     public abstract LiveData<MovieDetail> getMovieDetail(int movieId);
 }

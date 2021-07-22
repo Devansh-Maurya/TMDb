@@ -49,7 +49,7 @@ public class MainActivity extends DaggerBaseActivity<MainViewModel, ActivityMain
     @Override
     protected void setupObservers() {
         viewModel.getBookmarkMovieLiveData().observe(this, movie -> {
-            if (movie.bookmarked()) {
+            if (movie.isBookmarked()) {
                 toast("Bookmarked " + movie.title);
             } else {
                 toast("Bookmark removed");
