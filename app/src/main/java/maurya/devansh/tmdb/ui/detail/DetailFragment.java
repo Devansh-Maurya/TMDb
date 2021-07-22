@@ -20,16 +20,12 @@ import maurya.devansh.tmdb.data.model.Movie;
 import maurya.devansh.tmdb.data.model.MovieDetail;
 import maurya.devansh.tmdb.databinding.FragmentDetailBinding;
 import maurya.devansh.tmdb.ui.MainViewModel;
-import maurya.devansh.tmdb.ui.base.Action;
-import maurya.devansh.tmdb.ui.base.ActionPerformer;
 import maurya.devansh.tmdb.ui.base.DaggerBaseFragment;
 import maurya.devansh.tmdb.utils.common.ApiUtils;
 
-public class DetailFragment extends DaggerBaseFragment<DetailViewModel, FragmentDetailBinding>
-    implements ActionPerformer {
+public class DetailFragment extends DaggerBaseFragment<DetailViewModel, FragmentDetailBinding> {
 
     private MainViewModel mainViewModel;
-    private DetailFragmentArgs args;
 
     @Override
     protected Pair<ViewModelStoreOwner, Class<DetailViewModel>> provideViewModelCreators() {
@@ -44,8 +40,8 @@ public class DetailFragment extends DaggerBaseFragment<DetailViewModel, Fragment
     @Override
     protected void setupView(@NonNull View view) {
         mainViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel.class);
-        args = DetailFragmentArgs.fromBundle(getArguments());
 
+        DetailFragmentArgs args = DetailFragmentArgs.fromBundle(getArguments());
         viewModel.getMovieDetail(args.getMovieId());
     }
 
@@ -75,19 +71,10 @@ public class DetailFragment extends DaggerBaseFragment<DetailViewModel, Fragment
 
         binding().ivBack.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
         binding().ivShare.setOnClickListener(v -> shareMovie(data));
-        binding().ivBookmark.setOnClickListener(v -> {
-            Movie movie = args.getMovie();
-            mainViewModel.bookmarkMovie(movie, movie.bookmarked());
-        });
-    }
-
-    @Override
-    public void performAction(Action action) {
-        if (action instanceof Action.MovieBookmarked) {
-            Action.MovieBookmarked movieBookmarked = (Action.MovieBookmarked) action;
-//            viewModel.bookmarkMovie(movieBookmarked.movie, movieBookmarked.isBookmarked);
-            toast(movieBookmarked.movie.title + movieBookmarked.isBookmarked);
-        }
+        binding().ivBookmark.setOnCheckedChangeListener(((buttonView, isChecked) -> {
+            Movie movie = new Movie(data.id, data.posterPath, data.releaseDate, data.title, data.originalLanguage);
+            mainViewModel.bookmarkMovie(movie, isChecked);
+        }));
     }
 
     private void shareMovie(MovieDetail data) {

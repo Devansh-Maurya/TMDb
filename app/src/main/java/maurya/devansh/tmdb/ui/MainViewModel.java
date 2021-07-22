@@ -30,12 +30,10 @@ public class MainViewModel extends BaseViewModel {
     }
 
     public void bookmarkMovie(Movie movie, boolean isBookmarked) {
-        compositeDisposable.add(movieRepository.bookmarkMovie(movie, !isBookmarked)
+        compositeDisposable.add(movieRepository.bookmarkMovie(movie, isBookmarked)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
-            .subscribe(() -> {
-                bookmarkMovieLiveData.postValue(movie);
-            }, throwable -> {})
+            .subscribe(() -> bookmarkMovieLiveData.postValue(movie), throwable -> {})
         );
     }
 

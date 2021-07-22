@@ -33,9 +33,6 @@
         <argument
             android:name="movieId"
             app:argType="integer" />
-        <argument
-            android:name="movie"
-            app:argType="maurya.devansh.tmdb.data.model.Movie" />
     </fragment>
 
     <action
