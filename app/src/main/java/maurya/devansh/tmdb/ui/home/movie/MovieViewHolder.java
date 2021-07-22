@@ -3,11 +3,14 @@ package maurya.devansh.tmdb.ui.home.movie;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 
+import maurya.devansh.tmdb.NavGraphMainDirections;
 import maurya.devansh.tmdb.R;
 import maurya.devansh.tmdb.data.model.Movie;
 import maurya.devansh.tmdb.databinding.ItemMovieBinding;
@@ -33,8 +36,9 @@ public class MovieViewHolder extends BaseViewHolder<Movie, ItemMovieBinding> {
 
     @Override
     public void bind(@NonNull Movie data) {
+        String posterUrl = ApiUtils.getTmdbImageUrl(data.posterPath);
         Glide.with(binding.ivPoster)
-            .load(ApiUtils.getTmdbImageUrl(data.posterPath))
+            .load(posterUrl)
             .transition(DrawableTransitionOptions.withCrossFade(200))
             .apply(new RequestOptions().error(R.drawable.ic_movie_filled))
             .into(binding.ivPoster);
@@ -45,5 +49,10 @@ public class MovieViewHolder extends BaseViewHolder<Movie, ItemMovieBinding> {
             performAction(new Action.MovieBookmarked(data, isChecked))
         ));
         binding.buttonBookmark.setChecked(data.bookmarked());
+
+        binding.getRoot().setOnClickListener(view -> {
+            NavDirections action = NavGraphMainDirections.actionOpenDetailScreen(data.id);
+            Navigation.findNavController(binding.getRoot()).navigate(action);
+        });
     }
 }

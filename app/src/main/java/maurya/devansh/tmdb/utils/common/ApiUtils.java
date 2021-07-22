@@ -8,8 +8,10 @@ import androidx.annotation.NonNull;
 
 public class ApiUtils {
 
-    // This may change in future. Advisable will be to use /configuration API
-    // Source: https://developers.themoviedb.org/3/getting-started/images
+    /**
+     * This may change in future. Advisable will be to use /configuration API
+     * Source: https://developers.themoviedb.org/3/getting-started/images
+     * */
     @NonNull
     public static String getTmdbImageUrl(String imagePath) {
         return "https://image.tmdb.org/t/p/w500" + imagePath;

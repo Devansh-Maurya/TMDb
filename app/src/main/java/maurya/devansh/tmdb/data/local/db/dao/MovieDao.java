@@ -1,5 +1,6 @@
 package maurya.devansh.tmdb.data.local.db.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.paging.PagingSource;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -13,6 +14,7 @@ import java.util.List;
 import io.reactivex.Completable;
 import maurya.devansh.tmdb.data.model.BookmarkedMovie;
 import maurya.devansh.tmdb.data.model.Movie;
+import maurya.devansh.tmdb.data.model.MovieDetail;
 import maurya.devansh.tmdb.data.model.MoviesList;
 import maurya.devansh.tmdb.data.model.NowPlayingMovie;
 import maurya.devansh.tmdb.data.model.TrendingMovie;
@@ -102,4 +104,9 @@ public abstract class MovieDao {
         insertNowPlayingMovies(trendingMovies);
     }
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    public abstract void insertMovieDetail(MovieDetail movieDetail);
+
+    @Query("SELECT * FROM movie_detail WHERE id == :movieId")
+    public abstract LiveData<MovieDetail> getMovieDetail(int movieId);
 }

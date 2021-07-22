@@ -17,20 +17,15 @@ import maurya.devansh.tmdb.ui.base.DaggerBaseFragment;
 import maurya.devansh.tmdb.ui.home.movie.MovieAdapter;
 
 public class HomeListFragment extends DaggerBaseFragment<HomeListViewModel, FragmentHomeListBinding>
-        implements ActionPerformer {
+    implements ActionPerformer {
 
     private static final String TYPE = "type";
 
     private final MovieAdapter movieAdapter = new MovieAdapter(this);
 
-    public HomeListFragment() {
-        // Required empty public constructor
-    }
-
     public static HomeListFragment newInstance(int type) {
         Bundle args = new Bundle();
         args.putInt(TYPE, type);
-
         HomeListFragment fragment = new HomeListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -49,18 +44,18 @@ public class HomeListFragment extends DaggerBaseFragment<HomeListViewModel, Frag
     @Override
     protected void setupView(@NonNull View view) {
         binding().recyclerView.setAdapter(movieAdapter);
+        if (getArguments() != null) {
+            int movieListType = getArguments().getInt(TYPE);
+            viewModel.getMovies(movieListType);
+        }
     }
 
     @Override
     protected void setupObservers() {
-        if (getArguments() != null) {
-            int movieListType = getArguments().getInt(TYPE);
-
-            viewModel.getMovies(movieListType).observe(getViewLifecycleOwner(), movies -> {
-                binding().progressBar.setVisibility(View.GONE);
-                movieAdapter.submitData(getViewLifecycleOwner().getLifecycle(), movies);
-            });
-        }
+        viewModel.movieListLiveData.observe(getViewLifecycleOwner(), movies -> {
+            binding().progressBar.setVisibility(View.GONE);
+            movieAdapter.submitData(getViewLifecycleOwner().getLifecycle(), movies);
+        });
     }
 
     @Override
