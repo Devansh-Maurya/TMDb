@@ -10,8 +10,6 @@ import androidx.appcompat.widget.SearchView;
 import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelStoreOwner;
 
-import org.jetbrains.annotations.NotNull;
-
 import maurya.devansh.tmdb.R;
 import maurya.devansh.tmdb.databinding.FragmentSearchBinding;
 import maurya.devansh.tmdb.ui.base.Action;
@@ -35,7 +33,7 @@ public class SearchFragment extends DaggerBaseFragment<SearchViewModel, Fragment
     }
 
     @Override
-    protected void setupView(@NonNull @NotNull View view) {
+    protected void setupView(@NonNull View view) {
         binding().recyclerView.setAdapter(movieAdapter);
         setupSearchBar();
     }
@@ -67,10 +65,11 @@ public class SearchFragment extends DaggerBaseFragment<SearchViewModel, Fragment
 
     @Override
     protected void setupObservers() {
-        viewModel.searchResultsLiveData.observe(getViewLifecycleOwner(), movies -> {
-            binding().progressBar.setVisibility(View.GONE);
-            movieAdapter.submitData(getViewLifecycleOwner().getLifecycle(), movies);
-        });
+        viewModel.setupSearchObserver(pagingDataLiveData ->
+            pagingDataLiveData.observe(getViewLifecycleOwner(), movies -> {
+                binding().progressBar.setVisibility(View.GONE);
+                movieAdapter.submitData(getViewLifecycleOwner().getLifecycle(), movies);
+            }));
     }
 
     @Override
