@@ -63,7 +63,10 @@ public abstract class MovieDao {
     public abstract PagingSource<Integer, Movie> getBookmarkedMovies();
 
     @Transaction
-    @Query("SELECT movie.* FROM movie, trending_movie AS tm WHERE movie.id == tm.id ORDER BY tm.page, tm.list_position")
+    @Query("SELECT bookmarked_movie.id AS bookmark_id, movie.* FROM movie, trending_movie AS tm " +
+        "LEFT JOIN bookmarked_movie ON movie.id == bookmarked_movie.id " +
+        "WHERE movie.id == tm.id " +
+        "ORDER BY tm.page, tm.list_position")
     public abstract PagingSource<Integer, Movie> getTrendingMovies();
 
     @Transaction
@@ -108,6 +111,7 @@ public abstract class MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void insertMovieDetail(MovieDetail movieDetail);
 
+    @Transaction
     @Query("SELECT movie_detail.*, bookmarked_movie.id AS bookmark_id FROM movie_detail " +
         "LEFT JOIN bookmarked_movie ON movie_detail.id == bookmarked_movie.id " +
         "WHERE movie_detail.id == :movieId")
