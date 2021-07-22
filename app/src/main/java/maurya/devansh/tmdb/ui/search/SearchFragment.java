@@ -8,18 +8,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.util.Pair;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
+import androidx.navigation.fragment.NavHostFragment;
 
 import maurya.devansh.tmdb.R;
 import maurya.devansh.tmdb.databinding.FragmentSearchBinding;
-import maurya.devansh.tmdb.ui.MainViewModel;
 import maurya.devansh.tmdb.ui.base.DaggerBaseFragment;
 import maurya.devansh.tmdb.ui.home.movie.MovieAdapter;
 
 public class SearchFragment extends DaggerBaseFragment<SearchViewModel, FragmentSearchBinding> {
 
-    private MainViewModel mainViewModel;
     private final MovieAdapter movieAdapter = new MovieAdapter(null, false);
 
     @Override
@@ -34,9 +32,10 @@ public class SearchFragment extends DaggerBaseFragment<SearchViewModel, Fragment
 
     @Override
     protected void setupView(@NonNull View view) {
-        mainViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel.class);
-
         binding().recyclerView.setAdapter(movieAdapter);
+        binding().toolbar.setNavigationOnClickListener(v ->
+            NavHostFragment.findNavController(this).navigateUp()
+        );
         setupSearchBar();
     }
 

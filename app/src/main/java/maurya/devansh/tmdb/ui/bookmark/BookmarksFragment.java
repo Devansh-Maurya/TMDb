@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelStoreOwner;
+import androidx.navigation.fragment.NavHostFragment;
 
 import maurya.devansh.tmdb.databinding.FragmentBookmarksBinding;
 import maurya.devansh.tmdb.ui.base.DaggerBaseFragment;
@@ -32,6 +33,9 @@ public class BookmarksFragment extends DaggerBaseFragment<BookmarksViewModel, Fr
         movieAdapter = new MovieAdapter(null, false);
         movieAdapter.refresh();
         binding().recyclerView.setAdapter(movieAdapter);
+        binding().toolbar.setNavigationOnClickListener(v ->
+            NavHostFragment.findNavController(this).navigateUp()
+        );
     }
 
     @Override
