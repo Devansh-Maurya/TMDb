@@ -40,26 +40,22 @@ public class SearchFragment extends DaggerBaseFragment<SearchViewModel, Fragment
 
     private void setupSearchBar() {
         binding().toolbar.inflateMenu(R.menu.menu_search);
-        binding().toolbar.setOnMenuItemClickListener(menuItem -> {
-            final SearchView searchView = (SearchView) menuItem.getActionView();
-            searchView.setQueryHint(getString(R.string.search));
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
-                    // see https://code.google.com/p/android/issues/detail?id=24599
-                    searchView.clearFocus();
-                    return true;
-                }
+        SearchView searchView = (SearchView) binding().toolbar.getMenu().findItem(R.id.actionSearch).getActionView();
+        searchView.setQueryHint(getString(R.string.search));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
+                // see https://code.google.com/p/android/issues/detail?id=24599
+                searchView.clearFocus();
+                return true;
+            }
 
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    viewModel.getSearchResults(newText);
-                    return false;
-                }
-            });
-
-            return true;
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                viewModel.getSearchResults(newText);
+                return false;
+            }
         });
     }
 
