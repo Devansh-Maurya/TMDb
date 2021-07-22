@@ -55,6 +55,11 @@ public class SearchFragment extends DaggerBaseFragment<SearchViewModel, Fragment
             @Override
             public boolean onQueryTextChange(String newText) {
                 viewModel.getSearchResults(newText);
+                if (newText.isEmpty() && movieAdapter.getItemCount() == 0) {
+                    binding().layoutEmpty.setVisibility(View.VISIBLE);
+                } else {
+                    binding().layoutEmpty.setVisibility(View.GONE);
+                }
                 return false;
             }
         });
