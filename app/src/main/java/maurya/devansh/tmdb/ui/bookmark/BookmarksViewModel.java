@@ -18,7 +18,7 @@ import maurya.devansh.tmdb.ui.base.BaseViewModel;
 
 public class BookmarksViewModel extends BaseViewModel {
 
-    public final MovieRepository movieRepository;
+    private final MovieRepository movieRepository;
 
     @Inject
     BookmarksViewModel(

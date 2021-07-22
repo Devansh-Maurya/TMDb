@@ -46,18 +46,17 @@ public class HomeListFragment extends DaggerBaseFragment<HomeListViewModel, Frag
         movieAdapter = new MovieAdapter(this, true);
         movieAdapter.refresh();
         binding().recyclerView.setAdapter(movieAdapter);
-        if (getArguments() != null) {
-            int movieListType = getArguments().getInt(TYPE);
-            viewModel.getMovies(movieListType);
-        }
     }
 
     @Override
     protected void setupObservers() {
-        viewModel.movieListLiveData.observe(getViewLifecycleOwner(), movies -> {
-            binding().progressBar.setVisibility(View.GONE);
-            movieAdapter.submitData(getViewLifecycleOwner().getLifecycle(), movies);
-        });
+        if (getArguments() != null) {
+            int movieListType = getArguments().getInt(TYPE);
+            viewModel.getMovies(movieListType).observe(getViewLifecycleOwner(), movies -> {
+                binding().progressBar.setVisibility(View.GONE);
+                movieAdapter.submitData(getViewLifecycleOwner().getLifecycle(), movies);
+            });
+        }
     }
 
     @Override

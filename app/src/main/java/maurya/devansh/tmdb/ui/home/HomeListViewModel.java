@@ -1,7 +1,6 @@
 package maurya.devansh.tmdb.ui.home;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModelKt;
 import androidx.paging.PagingData;
 import androidx.paging.PagingLiveData;
@@ -23,8 +22,6 @@ public class HomeListViewModel extends BaseViewModel {
 
     private final MovieRepository movieRepository;
 
-    public final MediatorLiveData<PagingData<Movie>> movieListLiveData = new MediatorLiveData<>();
-
     @Inject
     HomeListViewModel(
         CompositeDisposable compositeDisposable,
@@ -34,10 +31,10 @@ public class HomeListViewModel extends BaseViewModel {
         this.movieRepository = movieRepository;
     }
 
-    public void getMovies(@MoviesListType int movieListType) {
+    public LiveData<PagingData<Movie>> getMovies(@MoviesListType int movieListType) {
         LiveData<PagingData<Movie>> pagingDataLiveData = movieRepository.getMoviesList(movieListType);
         PagingLiveData.cachedIn(pagingDataLiveData, ViewModelKt.getViewModelScope(this));
-        movieListLiveData.addSource(pagingDataLiveData, movieListLiveData::setValue);
+        return pagingDataLiveData;
     }
 
     public void bookmarkMovie(Movie movie, boolean isBookmarked) {

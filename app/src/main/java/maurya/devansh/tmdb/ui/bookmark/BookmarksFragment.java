@@ -9,8 +9,6 @@ import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelStoreOwner;
 
-import org.jetbrains.annotations.NotNull;
-
 import maurya.devansh.tmdb.databinding.FragmentBookmarksBinding;
 import maurya.devansh.tmdb.ui.base.DaggerBaseFragment;
 import maurya.devansh.tmdb.ui.home.movie.MovieAdapter;
@@ -30,7 +28,7 @@ public class BookmarksFragment extends DaggerBaseFragment<BookmarksViewModel, Fr
     }
 
     @Override
-    protected void setupView(@NonNull @NotNull View view) {
+    protected void setupView(@NonNull View view) {
         movieAdapter = new MovieAdapter(null, false);
         movieAdapter.refresh();
         binding().recyclerView.setAdapter(movieAdapter);
