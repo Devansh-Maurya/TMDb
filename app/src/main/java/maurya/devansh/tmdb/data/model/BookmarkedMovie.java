@@ -1,5 +1,6 @@
 package maurya.devansh.tmdb.data.model;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 
 /**
@@ -9,7 +10,11 @@ import androidx.room.Entity;
 @Entity(tableName = "bookmarked_movie")
 public class BookmarkedMovie extends MovieId {
 
-    public BookmarkedMovie(int id) {
+    @ColumnInfo(name = "bookmark_timestamp")
+    public final long bookmarkTimestamp;
+
+    public BookmarkedMovie(int id, long bookmarkTimestamp) {
         super(id);
+        this.bookmarkTimestamp = bookmarkTimestamp;
     }
 }

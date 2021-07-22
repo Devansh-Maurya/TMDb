@@ -2,6 +2,8 @@ package maurya.devansh.tmdb.ui;
 
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -9,6 +11,7 @@ import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -40,8 +43,12 @@ public class MainActivity extends DaggerBaseActivity<MainViewModel, ActivityMain
                 getWindow().setStatusBarColor(getColorFromAttribute(android.R.attr.colorBackground));
                 binding.bottomNavigation.setVisibility(View.GONE);
             } else {
-                getWindow().setStatusBarColor(getColorFromAttribute(R.attr.colorPrimaryVariant));
-                binding.bottomNavigation.setVisibility(View.VISIBLE);
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
+                        getWindow().setStatusBarColor(getColorFromAttribute(R.attr.colorPrimaryVariant));
+                        binding.bottomNavigation.setVisibility(View.VISIBLE);
+                    }
+                }, getResources().getInteger(android.R.integer.config_mediumAnimTime));
             }
         }));
     }
@@ -50,9 +57,9 @@ public class MainActivity extends DaggerBaseActivity<MainViewModel, ActivityMain
     protected void setupObservers() {
         viewModel.getBookmarkMovieLiveData().observe(this, movie -> {
             if (movie.isBookmarked()) {
-                toast("Bookmarked " + movie.title);
+                toast(getString(R.string.bookmarked, movie.title));
             } else {
-                toast("Bookmark removed");
+                toast(R.string.bookmark_removed);
             }
         });
     }

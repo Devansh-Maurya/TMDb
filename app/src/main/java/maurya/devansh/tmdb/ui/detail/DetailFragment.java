@@ -14,6 +14,8 @@ import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 
 import maurya.devansh.tmdb.R;
 import maurya.devansh.tmdb.data.model.Movie;
@@ -59,11 +61,14 @@ public class DetailFragment extends DaggerBaseFragment<DetailViewModel, Fragment
     }
 
     private void updateUi(MovieDetail data) {
+        binding().progressBar.setVisibility(View.GONE);
         binding().groupLayout.setVisibility(View.VISIBLE);
 
         String posterUrl = ApiUtils.getTmdbImageUrl(data.posterPath);
         Glide.with(binding().ivPoster)
             .load(posterUrl)
+            .transition(DrawableTransitionOptions.withCrossFade(200))
+            .apply(new RequestOptions().error(R.drawable.ic_movie_filled))
             .into(binding().ivPoster);
         binding().tvTitle.setText(data.title);
         binding().tvInfo.setText(data.getInfoString());
@@ -73,7 +78,7 @@ public class DetailFragment extends DaggerBaseFragment<DetailViewModel, Fragment
         binding().ivBack.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
         binding().ivShare.setOnClickListener(v -> shareMovie(data));
         binding().ivBookmark.setOnCheckedChangeListener(((buttonView, isChecked) -> {
-            Movie movie = new Movie(data.id, data.posterPath, data.releaseDate, data.title, data.originalLanguage);
+            Movie movie = new Movie(data.id, data.posterPath, data.releaseDate, data.title, data.originalLanguage, data.id);
             mainViewModel.bookmarkMovie(movie, isChecked);
         }));
     }

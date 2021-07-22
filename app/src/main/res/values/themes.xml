@@ -16,6 +16,7 @@
         <item name="bottomNavigationStyle">@style/BottomNavigationViewStyle</item>
         <item name="android:editTextColor">@android:color/white</item>
         <item name="android:navigationBarColor">?android:attr/colorBackground</item>
+        <item name="android:windowBackground">@drawable/bg_splash</item>
     </style>
 
     <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">

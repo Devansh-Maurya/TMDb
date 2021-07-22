@@ -57,9 +57,9 @@ public abstract class MovieDao {
     }
 
     @Transaction
-    @Query("SELECT * FROM movie " +
-        "WHERE id IN (SELECT bookmarked_movie.id FROM bookmarked_movie) " +
-        "ORDER BY movie.bookmark_timestamp DESC")
+    @Query("SELECT movie.* FROM movie, bookmarked_movie " +
+        "WHERE movie.id == bookmarked_movie.id " +
+        "ORDER BY bookmark_timestamp DESC")
     public abstract PagingSource<Integer, Movie> getBookmarkedMovies();
 
     @Transaction

@@ -11,7 +11,6 @@ import maurya.devansh.tmdb.TMDbApp;
 import maurya.devansh.tmdb.di.module.AppModule;
 import maurya.devansh.tmdb.di.module.BindingActivityModule;
 import maurya.devansh.tmdb.di.module.BindingFragmentModule;
-import maurya.devansh.tmdb.di.module.MoviesListTypeModule;
 import maurya.devansh.tmdb.di.module.ViewModelFactoryModule;
 
 /**
@@ -23,7 +22,6 @@ import maurya.devansh.tmdb.di.module.ViewModelFactoryModule;
     BindingFragmentModule.class,
     AndroidInjectionModule.class,
     ViewModelFactoryModule.class,
-    MoviesListTypeModule.class,
     BindingActivityModule.class
 })
 @Singleton

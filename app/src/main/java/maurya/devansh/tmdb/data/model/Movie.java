@@ -17,7 +17,7 @@ import java.util.Objects;
  */
 
 @Keep
-@Entity
+@Entity(tableName = "movie")
 public class Movie {
     @SerializedName("id")
     @PrimaryKey
@@ -41,10 +41,7 @@ public class Movie {
     public final String originalLanguage;
 
     @ColumnInfo(name = "bookmark_id")
-    public final int bookmarkId;
-
-    @ColumnInfo(name = "bookmark_timestamp")
-    public long bookmarkTimestamp;
+    private int bookmarkId;
 
     @Ignore
     private boolean isBookmarked;
@@ -66,8 +63,7 @@ public class Movie {
                  String releaseDate,
                  String title,
                  String originalLanguage,
-                 int bookmarkId,
-                 long bookmarkTimestamp
+                 int bookmarkId
     ) {
         this.id = id;
         this.posterPath = posterPath;
@@ -75,7 +71,6 @@ public class Movie {
         this.title = title;
         this.originalLanguage = originalLanguage;
         this.bookmarkId = bookmarkId;
-        this.bookmarkTimestamp = bookmarkTimestamp;
     }
 
     @Ignore
@@ -85,7 +80,7 @@ public class Movie {
                  String title,
                  String originalLanguage
     ) {
-        this(id, posterPath, releaseDate, title, originalLanguage, 0, 0);
+        this(id, posterPath, releaseDate, title, originalLanguage, 0);
     }
 
     @Ignore
@@ -96,10 +91,15 @@ public class Movie {
 
     public void setBookmarked(boolean isBookmarked) {
         this.isBookmarked = isBookmarked;
+        this.bookmarkId = isBookmarked ? id : 0;
     }
 
     public boolean isBookmarked() {
         return isBookmarked || bookmarkId != 0;
+    }
+
+    public int getBookmarkId() {
+        return bookmarkId;
     }
 
     @Override
