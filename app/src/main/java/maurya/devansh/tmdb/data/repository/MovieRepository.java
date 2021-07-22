@@ -144,7 +144,9 @@ public class MovieRepository {
         compositeDisposable.add(networkService.getMovieDetail(movieId)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
-            .subscribe(movieDao::insertMovieDetail, throwable -> {})
+            .subscribe(
+                movieDao::insertMovieDetail,
+                throwable -> movieDao.insertMovieDetail(new MovieDetail(movieId)))
         );
         return movieDao.getMovieDetail(movieId);
     }

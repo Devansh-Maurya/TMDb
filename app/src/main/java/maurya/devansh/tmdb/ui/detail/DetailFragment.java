@@ -14,6 +14,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
 
+import maurya.devansh.tmdb.R;
 import maurya.devansh.tmdb.data.model.MovieDetail;
 import maurya.devansh.tmdb.databinding.FragmentDetailBinding;
 import maurya.devansh.tmdb.ui.base.Action;
@@ -44,13 +45,17 @@ public class DetailFragment extends DaggerBaseFragment<DetailViewModel, Fragment
     protected void setupObservers() {
         viewModel.movieDetailLiveData.observe(getViewLifecycleOwner(), movieDetail -> {
             if (movieDetail != null) {
-                updateUi(movieDetail);
+                if (movieDetail.isDummy()) {
+                    toast(R.string.something_went_wrong);
+                } else {
+                    updateUi(movieDetail);
+                }
             }
         });
     }
 
     private void updateUi(MovieDetail data) {
-        binding().tvOverviewTitle.setVisibility(View.VISIBLE);
+        binding().groupLayout.setVisibility(View.VISIBLE);
 
         String posterUrl = ApiUtils.getTmdbImageUrl(data.posterPath);
         Glide.with(binding().ivPoster)

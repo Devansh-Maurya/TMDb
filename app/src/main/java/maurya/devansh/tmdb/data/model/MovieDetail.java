@@ -5,10 +5,12 @@ import android.text.TextUtils;
 import androidx.annotation.Keep;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -55,6 +57,9 @@ public class MovieDetail {
     @ColumnInfo(name = "overview")
     public final String overview;
 
+    @ColumnInfo(name = "id_dummy")
+    private boolean isDummy = false;
+
     public MovieDetail(int id,
                        String posterPath,
                        String releaseDate,
@@ -62,7 +67,9 @@ public class MovieDetail {
                        String originalLanguage,
                        int runtime,
                        List<Genre> genres,
-                       String overview) {
+                       String overview,
+                       boolean isDummy
+    ) {
         this.id = id;
         this.posterPath = posterPath;
         this.releaseDate = releaseDate;
@@ -71,6 +78,17 @@ public class MovieDetail {
         this.runtime = runtime;
         this.genres = genres;
         this.overview = overview;
+        this.isDummy = isDummy;
+    }
+
+    // Dummy object to be used when no data fetched from network
+    @Ignore
+    public MovieDetail(int id) {
+        this(id, "", "", "", "", 0, new ArrayList<>(), "", true);
+    }
+
+    public boolean isDummy() {
+        return isDummy;
     }
 
     public String getInfoString() {

@@ -42,6 +42,7 @@
         tools:ignore="ContentDescription" />
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
@@ -116,12 +117,10 @@
                 android:text="@string/storyline"
                 android:textColor="@color/white"
                 android:textSize="24sp"
-                android:visibility="gone"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvInfo"
-                tools:visibility="visible" />
+                app:layout_constraintTop_toBottomOf="@id/tvInfo" />
 
             <TextView
                 android:id="@+id/tvOverview"
@@ -138,11 +137,19 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvOverviewTitle"
-                tools:text="@tools:sample/lorem/random"
-                tools:targetApi="o" />
+                tools:targetApi="o"
+                tools:text="@tools:sample/lorem/random" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="ivBack,ivBookmark,ivShare,nestedScrollView"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
