@@ -17,7 +17,7 @@ import maurya.devansh.tmdb.ui.home.movie.MovieAdapter;
 
 public class BookmarksFragment extends DaggerBaseFragment<BookmarksViewModel, FragmentBookmarksBinding> {
 
-    private final MovieAdapter movieAdapter = new MovieAdapter(null, false);
+    private MovieAdapter movieAdapter;
 
     @Override
     protected Pair<ViewModelStoreOwner, Class<BookmarksViewModel>> provideViewModelCreators() {
@@ -31,6 +31,8 @@ public class BookmarksFragment extends DaggerBaseFragment<BookmarksViewModel, Fr
 
     @Override
     protected void setupView(@NonNull @NotNull View view) {
+        movieAdapter = new MovieAdapter(null, false);
+        movieAdapter.refresh();
         binding().recyclerView.setAdapter(movieAdapter);
     }
 

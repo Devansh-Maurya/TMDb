@@ -21,7 +21,7 @@ public class HomeListFragment extends DaggerBaseFragment<HomeListViewModel, Frag
 
     private static final String TYPE = "type";
 
-    private final MovieAdapter movieAdapter = new MovieAdapter(this, true);
+    private MovieAdapter movieAdapter;
 
     public static HomeListFragment newInstance(int type) {
         Bundle args = new Bundle();
@@ -43,6 +43,8 @@ public class HomeListFragment extends DaggerBaseFragment<HomeListViewModel, Frag
 
     @Override
     protected void setupView(@NonNull View view) {
+        movieAdapter = new MovieAdapter(this, true);
+        movieAdapter.refresh();
         binding().recyclerView.setAdapter(movieAdapter);
         if (getArguments() != null) {
             int movieListType = getArguments().getInt(TYPE);

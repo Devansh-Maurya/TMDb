@@ -7,7 +7,6 @@ import androidx.paging.Pager;
 import androidx.paging.PagingConfig;
 import androidx.paging.PagingData;
 import androidx.paging.PagingLiveData;
-import androidx.paging.PagingSource;
 import androidx.paging.PagingState;
 import androidx.paging.rxjava2.RxRemoteMediator;
 
@@ -94,17 +93,15 @@ public class MovieRepository {
 
     public LiveData<PagingData<Movie>> getBookmarkedMovies() {
         PagingConfig config = new PagingConfig(MoviesList.PAGE_SIZE, MoviesList.PAGE_SIZE, false);
-        PagingSource<Integer, Movie> pagingSource = movieDao.getBookmarkedMovies();
         return PagingLiveData.getLiveData(
-            new Pager<>(config, MoviesList.STARTING_PAGE, null, () -> pagingSource)
+            new Pager<>(config, MoviesList.STARTING_PAGE, null, movieDao::getBookmarkedMovies)
         );
     }
 
     public LiveData<PagingData<Movie>> searchMovies(String query) {
         PagingConfig config = new PagingConfig(MoviesList.PAGE_SIZE, MoviesList.PAGE_SIZE, false);
-        PagingSource<Integer, Movie> pagingSource = new SearchMoviePagingSource(this, query);
         return PagingLiveData.getLiveData(
-            new Pager<>(config, MoviesList.STARTING_PAGE, null, () -> pagingSource)
+            new Pager<>(config, MoviesList.STARTING_PAGE, null, () -> new SearchMoviePagingSource(this, query))
         );
     }
 
