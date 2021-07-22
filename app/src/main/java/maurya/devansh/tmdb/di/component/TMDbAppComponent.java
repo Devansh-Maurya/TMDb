@@ -9,6 +9,7 @@ import dagger.Component;
 import dagger.android.AndroidInjectionModule;
 import maurya.devansh.tmdb.TMDbApp;
 import maurya.devansh.tmdb.di.module.AppModule;
+import maurya.devansh.tmdb.di.module.BindingActivityModule;
 import maurya.devansh.tmdb.di.module.BindingFragmentModule;
 import maurya.devansh.tmdb.di.module.MoviesListTypeModule;
 import maurya.devansh.tmdb.di.module.ViewModelFactoryModule;
@@ -18,11 +19,12 @@ import maurya.devansh.tmdb.di.module.ViewModelFactoryModule;
  */
 
 @Component(modules = {
-        AppModule.class,
-        BindingFragmentModule.class,
-        AndroidInjectionModule.class,
-        ViewModelFactoryModule.class,
-        MoviesListTypeModule.class
+    AppModule.class,
+    BindingFragmentModule.class,
+    AndroidInjectionModule.class,
+    ViewModelFactoryModule.class,
+    MoviesListTypeModule.class,
+    BindingActivityModule.class
 })
 @Singleton
 public interface TMDbAppComponent {
