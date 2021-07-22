@@ -23,7 +23,7 @@ public class SearchFragment extends DaggerBaseFragment<SearchViewModel, Fragment
     implements ActionPerformer {
 
     private MainViewModel mainViewModel;
-    private final MovieAdapter movieAdapter = new MovieAdapter(this, true);
+    private final MovieAdapter movieAdapter = new MovieAdapter(null, false);
 
     @Override
     protected Pair<ViewModelStoreOwner, Class<SearchViewModel>> provideViewModelCreators() {
