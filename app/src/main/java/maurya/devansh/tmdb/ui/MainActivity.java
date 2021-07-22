@@ -21,10 +21,17 @@ import maurya.devansh.tmdb.ui.base.DaggerBaseActivity;
 public class MainActivity extends DaggerBaseActivity<MainViewModel, ActivityMainBinding> {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(binding.getRoot());
+    protected Pair<ViewModelStoreOwner, Class<MainViewModel>> provideViewModelCreators() {
+        return new Pair<>(this, MainViewModel.class);
+    }
 
+    @Override
+    protected ActivityMainBinding provideViewBinding() {
+        return ActivityMainBinding.inflate(getLayoutInflater());
+    }
+
+    @Override
+    protected void setupView(@Nullable Bundle savedInstanceState) {
         NavController navController = Navigation.findNavController(this, R.id.navHost);
         NavigationUI.setupWithNavController(binding.bottomNavigation, navController);
 
@@ -37,21 +44,6 @@ public class MainActivity extends DaggerBaseActivity<MainViewModel, ActivityMain
                 binding.bottomNavigation.setVisibility(View.VISIBLE);
             }
         }));
-    }
-
-    @Override
-    protected Pair<ViewModelStoreOwner, Class<MainViewModel>> provideViewModelCreators() {
-        return new Pair<>(this, MainViewModel.class);
-    }
-
-    @Override
-    protected ActivityMainBinding provideViewBinding() {
-        return ActivityMainBinding.inflate(getLayoutInflater());
-    }
-
-    @Override
-    protected void setupView(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-
     }
 
     @ColorInt
