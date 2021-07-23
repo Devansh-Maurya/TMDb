@@ -28,7 +28,8 @@ android {
             resValue "string", "authority", "\"${defaultConfig.applicationId}.provider\""
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField("String", "BASE_URL_TMDB_API", "\"https://api.themoviedb.org/3/\"")
             buildConfigField("String", "TMDB_API_KEY", localProperties['tmdbApiKey'])
