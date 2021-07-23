@@ -51,6 +51,7 @@ public class DetailFragment extends DaggerBaseFragment<DetailViewModel, Fragment
     protected void setupObservers() {
         viewModel.movieDetailLiveData.observe(getViewLifecycleOwner(), movieDetail -> {
             if (movieDetail != null) {
+                binding().progressBar.setVisibility(View.GONE);
                 if (movieDetail.isDummy()) {
                     toast(R.string.something_went_wrong);
                 } else {
@@ -61,7 +62,6 @@ public class DetailFragment extends DaggerBaseFragment<DetailViewModel, Fragment
     }
 
     private void updateUi(MovieDetail data) {
-        binding().progressBar.setVisibility(View.GONE);
         binding().groupLayout.setVisibility(View.VISIBLE);
 
         String posterUrl = ApiUtils.getTmdbImageUrl(data.posterPath);
