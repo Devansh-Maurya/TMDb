@@ -5,7 +5,7 @@
 
 #### An Android app to show movies information from The Movie Database (TMDb) API. The app also supports local data caching to show information when offline.
 
-#### Download APK : [Google Drive Link](https://drive.google.com/file/d/13q8wkfU-GVgQLscUBdrTwzjGZqmGOHSQ/view?usp=sharing)
+#### Download APK : [Google Drive Link](https://drive.google.com/file/d/1dZ0wZeMf3FJeP86qE8cGy5nlcZuR4Fq2/view?usp=sharing)
 
 ### Screenshots
 
