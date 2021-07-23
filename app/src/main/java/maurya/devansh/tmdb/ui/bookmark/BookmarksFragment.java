@@ -12,7 +12,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import maurya.devansh.tmdb.databinding.FragmentBookmarksBinding;
 import maurya.devansh.tmdb.ui.base.DaggerBaseFragment;
-import maurya.devansh.tmdb.ui.home.movie.MovieAdapter;
+import maurya.devansh.tmdb.ui.movie.MovieAdapter;
 
 public class BookmarksFragment extends DaggerBaseFragment<BookmarksViewModel, FragmentBookmarksBinding> {
 

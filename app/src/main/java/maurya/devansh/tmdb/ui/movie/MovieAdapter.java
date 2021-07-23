@@ -1,4 +1,4 @@
-package maurya.devansh.tmdb.ui.home.movie;
+package maurya.devansh.tmdb.ui.movie;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;

@@ -16,7 +16,7 @@ import maurya.devansh.tmdb.ui.MainViewModel;
 import maurya.devansh.tmdb.ui.base.Action;
 import maurya.devansh.tmdb.ui.base.ActionPerformer;
 import maurya.devansh.tmdb.ui.base.DaggerBaseFragment;
-import maurya.devansh.tmdb.ui.home.movie.MovieAdapter;
+import maurya.devansh.tmdb.ui.movie.MovieAdapter;
 
 public class HomeListFragment extends DaggerBaseFragment<HomeListViewModel, FragmentHomeListBinding>
     implements ActionPerformer {
