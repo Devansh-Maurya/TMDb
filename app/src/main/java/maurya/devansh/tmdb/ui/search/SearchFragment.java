@@ -14,7 +14,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import maurya.devansh.tmdb.R;
 import maurya.devansh.tmdb.databinding.FragmentSearchBinding;
 import maurya.devansh.tmdb.ui.base.DaggerBaseFragment;
-import maurya.devansh.tmdb.ui.home.movie.MovieAdapter;
+import maurya.devansh.tmdb.ui.movie.MovieAdapter;
 
 public class SearchFragment extends DaggerBaseFragment<SearchViewModel, FragmentSearchBinding> {
 

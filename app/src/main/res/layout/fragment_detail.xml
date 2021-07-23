@@ -86,6 +86,7 @@
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="32sp"
+                android:textStyle="bold"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toBottomOf="@id/ivPoster"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -149,9 +150,9 @@
 
     <ProgressBar
         android:id="@+id/progressBar"
-        android:indeterminateTint="?attr/colorPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:indeterminateTint="?attr/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
